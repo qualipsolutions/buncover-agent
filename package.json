@@ -1,8 +1,8 @@
 {
-	"name": "claude-dev",
-	"displayName": "Cline (prev. Claude Dev)",
-	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way.",
-	"version": "3.0.3",
+	"name": "buncover",
+	"displayName": "BunCover",
+	"description": "Official VS Code extension for BunCover - View and analyze your Bun test coverage with real-time updates and AI-powered insights. Features advanced AI integration, development tools, and seamless platform sync.",
+	"version": "1.0.0",
 	"icon": "assets/icons/icon.png",
 	"galleryBanner": {
 		"color": "#617A91",
@@ -12,36 +12,35 @@
 		"vscode": "^1.84.0"
 	},
 	"author": {
-		"name": "Cline Bot Inc."
+		"name": "BunCover Inc."
 	},
 	"license": "Apache-2.0",
-	"publisher": "saoudrizwan",
+	"publisher": "buncover",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/cline/cline"
+		"url": "https://github.com/buncover/buncover-agent"
 	},
-	"homepage": "https://cline.bot",
+	"homepage": "https://buncover.dev",
 	"categories": [
-		"AI",
-		"Chat",
+		"Testing",
 		"Programming Languages",
-		"Education",
-		"Snippets",
-		"Testing"
+		"Visualization",
+		"AI",
+		"Other"
 	],
 	"keywords": [
-		"cline",
-		"claude",
-		"dev",
-		"mcp",
-		"openrouter",
-		"coding",
-		"agent",
-		"autonomous",
-		"chatgpt",
-		"sonnet",
+		"buncover",
+		"bun",
+		"test",
+		"coverage",
+		"testing",
+		"report",
+		"visualization",
+		"analytics",
 		"ai",
-		"llama"
+		"claude",
+		"openai",
+		"gemini"
 	],
 	"activationEvents": [],
 	"main": "./dist/extension.js",
@@ -49,79 +48,228 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "claude-dev-ActivityBar",
-					"title": "Cline",
-					"icon": "$(robot)"
+					"id": "buncover-ActivityBar",
+					"title": "BunCover",
+					"icon": "$(beaker)"
 				}
 			]
 		},
 		"views": {
-			"claude-dev-ActivityBar": [
+			"buncover-ActivityBar": [
 				{
 					"type": "webview",
-					"id": "claude-dev.SidebarProvider",
-					"name": ""
+					"id": "buncover.coverageView",
+					"name": "Coverage Report"
+				},
+				{
+					"type": "webview",
+					"id": "buncover.aiView",
+					"name": "AI Tools"
+				},
+				{
+					"type": "webview",
+					"id": "buncover.mcpView",
+					"name": "MCP Servers"
 				}
 			]
 		},
 		"commands": [
 			{
-				"command": "cline.plusButtonClicked",
-				"title": "New Task",
-				"icon": "$(add)"
+				"command": "buncover.signIn",
+				"title": "Sign In",
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.mcpButtonClicked",
-				"title": "MCP Servers",
-				"icon": "$(server)"
+				"command": "buncover.viewCoverage",
+				"title": "View Coverage Report",
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.historyButtonClicked",
-				"title": "History",
-				"icon": "$(history)"
+				"command": "buncover.generateTests",
+				"title": "Generate Tests",
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.popoutButtonClicked",
-				"title": "Open in Editor",
-				"icon": "$(link-external)"
+				"command": "buncover.syncCoverage",
+				"title": "Sync Coverage Data",
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.settingsButtonClicked",
-				"title": "Settings",
-				"icon": "$(settings-gear)"
+				"command": "buncover.openInBrowser",
+				"title": "Open in Browser",
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.openInNewTab",
-				"title": "Open In New Tab",
-				"category": "Cline"
+				"command": "buncover.configureAI",
+				"title": "Configure AI",
+				"category": "BunCover"
+			},
+			{
+				"command": "buncover.trackCosts",
+				"title": "Track Costs",
+				"category": "BunCover"
+			},
+			{
+				"command": "buncover.manageMCP",
+				"title": "Manage MCP",
+				"category": "BunCover"
+			},
+			{
+				"command": "buncover.terminalHistory",
+				"title": "Terminal History",
+				"category": "BunCover"
+			},
+			{
+				"command": "buncover.browserTools",
+				"title": "Browser Tools",
+				"category": "BunCover"
 			}
 		],
+		"configuration": {
+			"title": "BunCover",
+			"properties": {
+				"buncover.apiKey": {
+					"type": "string",
+					"default": "",
+					"description": "Your BunCover API key"
+				},
+				"buncover.endpoint": {
+					"type": "string",
+					"default": "https://api.buncover.dev",
+					"description": "BunCover API endpoint"
+				},
+				"buncover.autoSync": {
+					"type": "boolean",
+					"default": true,
+					"description": "Automatically sync coverage data"
+				},
+				"buncover.showCoverage": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show inline coverage highlighting"
+				},
+				"buncover.notifications": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show coverage update notifications"
+				},
+				"buncover.ai.provider": {
+					"type": "string",
+					"enum": ["openrouter", "anthropic", "openai", "gemini", "bedrock", "azure", "vertex", "local"],
+					"default": "openrouter",
+					"description": "Selected AI provider"
+				},
+				"buncover.ai.apiKey": {
+					"type": "string",
+					"default": "",
+					"description": "API key for selected AI provider"
+				},
+				"buncover.ai.costTracking": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable AI cost tracking"
+				},
+				"buncover.ai.localModel": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"type": "string",
+							"enum": ["lmstudio", "ollama"],
+							"default": "ollama"
+						},
+						"endpoint": {
+							"type": "string",
+							"default": "http://localhost:11434"
+						},
+						"model": {
+							"type": "string",
+							"default": "codellama"
+						}
+					},
+					"description": "Local model configuration"
+				},
+				"buncover.terminal.autoApprove": {
+					"type": "boolean",
+					"default": false,
+					"description": "Auto-approve safe terminal commands"
+				},
+				"buncover.browser.headless": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable headless browser features"
+				},
+				"buncover.mcp.servers": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"enabled": {
+								"type": "boolean"
+							}
+						}
+					},
+					"default": [],
+					"description": "Custom MCP server configurations"
+				}
+			}
+		},
 		"menus": {
 			"view/title": [
 				{
-					"command": "cline.plusButtonClicked",
+					"command": "buncover.signIn",
 					"group": "navigation@1",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.coverageView"
 				},
 				{
-					"command": "cline.mcpButtonClicked",
+					"command": "buncover.viewCoverage",
 					"group": "navigation@2",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.coverageView"
 				},
 				{
-					"command": "cline.historyButtonClicked",
+					"command": "buncover.generateTests",
 					"group": "navigation@3",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.coverageView"
 				},
 				{
-					"command": "cline.popoutButtonClicked",
+					"command": "buncover.syncCoverage",
 					"group": "navigation@4",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.coverageView"
 				},
 				{
-					"command": "cline.settingsButtonClicked",
+					"command": "buncover.openInBrowser",
 					"group": "navigation@5",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.coverageView"
+				},
+				{
+					"command": "buncover.configureAI",
+					"group": "navigation@6",
+					"when": "view == buncover.aiView"
+				},
+				{
+					"command": "buncover.trackCosts",
+					"group": "navigation@7",
+					"when": "view == buncover.aiView"
+				},
+				{
+					"command": "buncover.manageMCP",
+					"group": "navigation@8",
+					"when": "view == buncover.mcpView"
+				},
+				{
+					"command": "buncover.terminalHistory",
+					"group": "navigation@9",
+					"when": "view == buncover.mcpView"
+				},
+				{
+					"command": "buncover.browserTools",
+					"group": "navigation@10",
+					"when": "view == buncover.mcpView"
 				}
 			]
 		}
