@@ -1,6 +1,10 @@
 import { ApiConfiguration, openRouterDefaultModelId } from "../../../src/shared/api"
 import { ModelInfo } from "../../../src/shared/api"
 export function validateApiConfiguration(apiConfiguration?: ApiConfiguration): string | undefined {
+	if (!apiConfiguration?.buncoverAccessKey) {
+		return "You must provide a valid BunCover access key to use this extension."
+	}
+
 	if (apiConfiguration) {
 		switch (apiConfiguration.apiProvider) {
 			case "anthropic":

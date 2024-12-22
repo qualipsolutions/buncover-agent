@@ -33,6 +33,7 @@ export interface ApiHandlerOptions {
 	geminiApiKey?: string
 	openAiNativeApiKey?: string
 	azureApiVersion?: string
+	buncoverAccessKey?: string // BunCover platform access key
 }
 
 export type ApiConfiguration = ApiHandlerOptions & {

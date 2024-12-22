@@ -1,4 +1,4 @@
-import { VSCodeButton, VSCodeLink, VSCodeTextArea } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeButton, VSCodeLink, VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { memo, useEffect, useState } from "react"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { validateApiConfiguration, validateModelId } from "../../utils/validate"
@@ -12,8 +12,14 @@ type SettingsViewProps = {
 }
 
 const SettingsView = ({ onDone }: SettingsViewProps) => {
-	const { apiConfiguration, version, customInstructions, setCustomInstructions, openRouterModels } =
-		useExtensionState()
+	const {
+		apiConfiguration,
+		version,
+		customInstructions,
+		setCustomInstructions,
+		openRouterModels,
+		setApiConfiguration,
+	} = useExtensionState()
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
 	const handleSubmit = () => {
@@ -82,6 +88,34 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 						apiErrorMessage={apiErrorMessage}
 						modelIdErrorMessage={modelIdErrorMessage}
 					/>
+				</div>
+
+				<div style={{ marginBottom: 5 }}>
+					<VSCodeTextField
+						value={apiConfiguration?.buncoverAccessKey || ""}
+						style={{ width: "100%" }}
+						type="password"
+						onInput={(e: any) =>
+							setApiConfiguration({
+								...apiConfiguration,
+								buncoverAccessKey: e.target?.value,
+							})
+						}
+						placeholder="Enter BunCover Access Key...">
+						<span style={{ fontWeight: "500" }}>BunCover Access Key</span>
+					</VSCodeTextField>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						Required to sync coverage data with BunCover platform.
+						<VSCodeLink href="https://buncover.dev" style={{ display: "inline", fontSize: "inherit" }}>
+							{" "}
+							Get your access key by signing up here.
+						</VSCodeLink>
+					</p>
 				</div>
 
 				<div style={{ marginBottom: 5 }}>
