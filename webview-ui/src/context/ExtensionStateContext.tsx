@@ -23,6 +23,8 @@ interface ExtensionStateContextType extends ExtensionState {
 	setApiConfiguration: (config: ApiConfiguration) => void
 	setCustomInstructions: (value?: string) => void
 	setShowAnnouncement: (value: boolean) => void
+	workspaceSettings?: { buncoverProjectId?: string }
+	setWorkspaceSettings: (settings: { buncoverProjectId?: string }) => void
 }
 
 const ExtensionStateContext = createContext<ExtensionStateContextType | undefined>(undefined)
@@ -123,6 +125,11 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		setApiConfiguration: (value) => setState((prevState) => ({ ...prevState, apiConfiguration: value })),
 		setCustomInstructions: (value) => setState((prevState) => ({ ...prevState, customInstructions: value })),
 		setShowAnnouncement: (value) => setState((prevState) => ({ ...prevState, shouldShowAnnouncement: value })),
+		workspaceSettings: state.workspaceSettings,
+		setWorkspaceSettings: (settings) => {
+			setState((prevState) => ({ ...prevState, workspaceSettings: settings }))
+			vscode.postMessage({ type: "workspaceSettings", workspaceSettings: settings })
+		},
 	}
 
 	return <ExtensionStateContext.Provider value={contextValue}>{children}</ExtensionStateContext.Provider>

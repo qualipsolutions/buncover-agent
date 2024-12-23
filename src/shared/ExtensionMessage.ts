@@ -19,6 +19,7 @@ export interface ExtensionMessage {
 		| "partialMessage"
 		| "openRouterModels"
 		| "mcpServers"
+		| "workspaceSettings"
 	text?: string
 	action?:
 		| "chatButtonClicked"
@@ -35,6 +36,7 @@ export interface ExtensionMessage {
 	partialMessage?: ClineMessage
 	openRouterModels?: Record<string, ModelInfo>
 	mcpServers?: McpServer[]
+	workspaceSettings?: { buncoverProjectId?: string }
 }
 
 export interface ExtensionState {
@@ -46,6 +48,7 @@ export interface ExtensionState {
 	taskHistory: HistoryItem[]
 	shouldShowAnnouncement: boolean
 	autoApprovalSettings: AutoApprovalSettings
+	workspaceSettings?: { buncoverProjectId?: string }
 }
 
 export interface ClineMessage {

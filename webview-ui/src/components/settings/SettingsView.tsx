@@ -19,6 +19,8 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 		setCustomInstructions,
 		openRouterModels,
 		setApiConfiguration,
+		workspaceSettings,
+		setWorkspaceSettings,
 	} = useExtensionState()
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
@@ -114,6 +116,33 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 						<VSCodeLink href="https://buncover.dev" style={{ display: "inline", fontSize: "inherit" }}>
 							{" "}
 							Get your access key by signing up here.
+						</VSCodeLink>
+					</p>
+				</div>
+
+				<div style={{ marginBottom: 5 }}>
+					<VSCodeTextField
+						value={workspaceSettings?.buncoverProjectId || ""}
+						style={{ width: "100%" }}
+						onInput={(e: any) =>
+							setWorkspaceSettings({
+								...workspaceSettings,
+								buncoverProjectId: e.target?.value,
+							})
+						}
+						placeholder="Enter BunCover Project ID...">
+						<span style={{ fontWeight: "500" }}>BunCover Project ID</span>
+					</VSCodeTextField>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						Required for this workspace.
+						<VSCodeLink href="https://buncover.dev" style={{ display: "inline", fontSize: "inherit" }}>
+							{" "}
+							Get your project ID from the BunCover dashboard.
 						</VSCodeLink>
 					</p>
 				</div>

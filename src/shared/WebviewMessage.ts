@@ -26,12 +26,14 @@ export interface WebviewMessage {
 		| "openMcpSettings"
 		| "restartMcpServer"
 		| "autoApprovalSettings"
+		| "workspaceSettings"
 	text?: string
 	askResponse?: ClineAskResponse
 	apiConfiguration?: ApiConfiguration
 	images?: string[]
 	bool?: boolean
 	autoApprovalSettings?: AutoApprovalSettings
+	workspaceSettings?: { buncoverProjectId?: string }
 }
 
 export type ClineAskResponse = "yesButtonClicked" | "noButtonClicked" | "messageResponse"

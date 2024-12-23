@@ -514,6 +514,12 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						}
 						break
 					}
+					case "workspaceSettings":
+						if (message.workspaceSettings) {
+							await this.context.workspaceState.update("workspaceSettings", message.workspaceSettings)
+						}
+						await this.postStateToWebview()
+						break
 					// Add more switch case statements here as more webview message commands
 					// are created within the webview context (i.e. inside media/main.js)
 				}
@@ -833,6 +839,9 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	async getStateToPostToWebview() {
 		const { apiConfiguration, lastShownAnnouncementId, customInstructions, taskHistory, autoApprovalSettings } =
 			await this.getState()
+		const workspaceSettings = await this.context.workspaceState.get<{ buncoverProjectId?: string }>(
+			"workspaceSettings",
+		)
 		return {
 			version: this.context.extension?.packageJSON?.version ?? "",
 			apiConfiguration,
@@ -842,6 +851,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			taskHistory: (taskHistory || []).filter((item) => item.ts && item.task).sort((a, b) => b.ts - a.ts),
 			shouldShowAnnouncement: lastShownAnnouncementId !== this.latestAnnouncementId,
 			autoApprovalSettings,
+			workspaceSettings,
 		}
 	}
 
