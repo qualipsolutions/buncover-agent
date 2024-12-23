@@ -520,6 +520,10 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						}
 						await this.postStateToWebview()
 						break
+					case "runTests":
+						await this.initClineWithTask('Run "bun test"')
+						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
+						break
 					// Add more switch case statements here as more webview message commands
 					// are created within the webview context (i.e. inside media/main.js)
 				}

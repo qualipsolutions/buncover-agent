@@ -1,4 +1,5 @@
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
+import { vscode } from "../../utils/vscode"
 
 type CoverageViewProps = {
 	onDone: () => void
@@ -48,7 +49,8 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 						appearance="secondary"
 						style={{ width: "100%" }}
 						onClick={() => {
-							// vscode.postMessage({ type: "openMcpSettings" })
+							vscode.postMessage({ type: "runTests" })
+							onDone()
 						}}>
 						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
 						Run Tests
