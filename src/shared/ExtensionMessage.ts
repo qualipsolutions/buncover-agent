@@ -20,12 +20,14 @@ export interface ExtensionMessage {
 		| "openRouterModels"
 		| "mcpServers"
 		| "workspaceSettings"
+		| "coverageServers"
 	text?: string
 	action?:
 		| "chatButtonClicked"
 		| "mcpButtonClicked"
 		| "settingsButtonClicked"
 		| "historyButtonClicked"
+		| "coverageButtonClicked"
 		| "didBecomeVisible"
 	invoke?: "sendMessage" | "primaryButtonClick" | "secondaryButtonClick"
 	state?: ExtensionState
@@ -36,6 +38,7 @@ export interface ExtensionMessage {
 	partialMessage?: ClineMessage
 	openRouterModels?: Record<string, ModelInfo>
 	mcpServers?: McpServer[]
+	coverageServers?: McpServer[]
 	workspaceSettings?: { buncoverProjectId?: string }
 }
 
