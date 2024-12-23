@@ -520,10 +520,20 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						}
 						await this.postStateToWebview()
 						break
-					case "runTests":
-						await this.initClineWithTask('Run "bun test"')
+					case "runTests": {
+						// Set auto-approval for test commands
+						const autoApprovalSettings = {
+							...DEFAULT_AUTO_APPROVAL_SETTINGS,
+							enabled: true,
+							executeCommands: true,
+						}
+						await this.initClineWithTask('Run "bun test" to generate coverage report')
+						if (this.cline) {
+							this.cline.autoApprovalSettings = autoApprovalSettings
+						}
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
 						break
+					}
 					// Add more switch case statements here as more webview message commands
 					// are created within the webview context (i.e. inside media/main.js)
 				}
