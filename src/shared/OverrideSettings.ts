@@ -1,3 +1,12 @@
+import * as vscode from "vscode"
+
+export const extensionName = "BunCover"
+export const extensionThemeIcon = new vscode.ThemeIcon("bug")
+
+// located at src/assets/icons/
+export const extensionLightIconName = "robot_panel_light.png"
+export const extensionDarkIconName = "robot_panel_dark.png"
+
 export type WorkspaceSettings = {
 	buncoverProjectId?: string
 	testNamePattern?: string

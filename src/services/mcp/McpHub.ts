@@ -25,6 +25,7 @@ import {
 } from "../../shared/mcp"
 import { fileExistsAtPath } from "../../utils/fs"
 import { arePathsEqual } from "../../utils/path"
+import { extensionName } from "../../shared/OverrideSettings"
 
 export type McpConnection = {
 	server: McpServer
@@ -144,7 +145,7 @@ export class McpHub {
 			// Each MCP server requires its own transport connection and has unique capabilities, configurations, and error handling. Having separate clients also allows proper scoping of resources/tools and independent server management like reconnection.
 			const client = new Client(
 				{
-					name: "Cline",
+					name: extensionName,
 					version: this.providerRef.deref()?.context.extension?.packageJSON?.version ?? "1.0.0",
 				},
 				{

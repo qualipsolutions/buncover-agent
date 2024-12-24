@@ -1,4 +1,6 @@
 import * as vscode from "vscode"
+import { extensionThemeIcon } from "../../shared/OverrideSettings"
+import { extensionName } from "../../shared/OverrideSettings"
 
 export interface TerminalInfo {
 	terminal: vscode.Terminal
@@ -16,8 +18,8 @@ export class TerminalRegistry {
 	static createTerminal(cwd?: string | vscode.Uri | undefined): TerminalInfo {
 		const terminal = vscode.window.createTerminal({
 			cwd,
-			name: "Cline",
-			iconPath: new vscode.ThemeIcon("robot"),
+			name: extensionName,
+			iconPath: extensionThemeIcon,
 		})
 		const newInfo: TerminalInfo = {
 			terminal,

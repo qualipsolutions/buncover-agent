@@ -50,7 +50,7 @@
 				{
 					"id": "claude-dev-ActivityBar",
 					"title": "BunCover",
-					"icon": "$(robot)"
+					"icon": "$(bug)"
 				}
 			]
 		},

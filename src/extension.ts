@@ -6,6 +6,7 @@ import { ClineProvider } from "./core/webview/ClineProvider"
 import { createClineAPI } from "./exports"
 import "./utils/path" // necessary to have access to String.prototype.toPosix
 import { DIFF_VIEW_URI_SCHEME } from "./integrations/editor/DiffViewProvider"
+import { extensionDarkIconName, extensionLightIconName, extensionName } from "./shared/OverrideSettings"
 
 /*
 Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -21,7 +22,7 @@ let outputChannel: vscode.OutputChannel
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	outputChannel = vscode.window.createOutputChannel("Cline")
+	outputChannel = vscode.window.createOutputChannel(extensionName)
 	context.subscriptions.push(outputChannel)
 
 	outputChannel.appendLine("Cline extension activated")
@@ -70,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		const targetCol = hasVisibleEditors ? Math.max(lastCol + 1, 1) : vscode.ViewColumn.Two
 
-		const panel = vscode.window.createWebviewPanel(ClineProvider.tabPanelId, "Cline", targetCol, {
+		const panel = vscode.window.createWebviewPanel(ClineProvider.tabPanelId, extensionName, targetCol, {
 			enableScripts: true,
 			retainContextWhenHidden: true,
 			localResourceRoots: [context.extensionUri],
@@ -78,8 +79,8 @@ export function activate(context: vscode.ExtensionContext) {
 		// TODO: use better svg icon with light and dark variants (see https://stackoverflow.com/questions/58365687/vscode-extension-iconpath)
 
 		panel.iconPath = {
-			light: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_light.png"),
-			dark: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_dark.png"),
+			light: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", extensionLightIconName),
+			dark: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", extensionDarkIconName),
 		}
 		tabProvider.resolveWebviewView(panel)
 

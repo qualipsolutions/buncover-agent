@@ -23,7 +23,7 @@ import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { AutoApprovalSettings, DEFAULT_AUTO_APPROVAL_SETTINGS } from "../../shared/AutoApprovalSettings"
-import { bunCoverRunCommand, WorkspaceSettings } from "../../shared/OverrideSettings"
+import { bunCoverRunCommand, extensionName, WorkspaceSettings } from "../../shared/OverrideSettings"
 import { showSystemNotification } from "../../integrations/notifications"
 
 /*
@@ -567,7 +567,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	// MCP
 
 	async ensureMcpServersDirectoryExists(): Promise<string> {
-		const mcpServersDir = path.join(os.homedir(), "Documents", "Cline", "MCP")
+		const mcpServersDir = path.join(os.homedir(), "Documents", extensionName, "MCP")
 		try {
 			await fs.mkdir(mcpServersDir, { recursive: true })
 		} catch (error) {
