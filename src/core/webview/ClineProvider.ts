@@ -531,7 +531,26 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						const projectId = workspaceSettings?.buncoverProjectId
 
 						// Create task with credentials
-						const task = `Run "buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}" to generate coverage report.`
+						const task = `Run "buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}" to generate coverage report and show the following test coverage report summary.
+
+Test Coverage Report Summary:
+
+Overall Coverage:
+• Functions: <All files % Funcs>
+• Lines: <All files % Lines>
+
+Key Metrics:
+• Total Tests: <number>
+• Files Tested: <number>
+• Test Duration: <ms>
+• Expect Calls: <number>
+• All tests passed successfully: <Yes/No>
+
+Areas Needing Attention:
+1. Files with Low Coverage:
+• <path> (<% Lines> lines, <% Funcs> functions)
+2. Files with Uncovered Lines:
+• <path>: Lines <Uncovered Lines>`
 
 						await this.initClineWithTask(task)
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
