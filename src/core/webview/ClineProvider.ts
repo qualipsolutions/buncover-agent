@@ -521,16 +521,19 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						await this.postStateToWebview()
 						break
 					case "runTests": {
-						// Set auto-approval for test commands
-						const autoApprovalSettings = {
-							...DEFAULT_AUTO_APPROVAL_SETTINGS,
-							enabled: true,
-							executeCommands: true,
-						}
-						await this.initClineWithTask('Run "bun test" to generate coverage report')
-						if (this.cline) {
-							this.cline.autoApprovalSettings = autoApprovalSettings
-						}
+						// Get BunCover credentials
+						const { apiConfiguration } = await this.getState()
+						const workspaceSettings = await this.context.workspaceState.get<{ buncoverProjectId?: string }>(
+							"workspaceSettings",
+						)
+
+						const accessKey = apiConfiguration.buncoverAccessKey
+						const projectId = workspaceSettings?.buncoverProjectId
+
+						// Create task with credentials
+						const task = `Run "buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}" to generate coverage report.`
+
+						await this.initClineWithTask(task)
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
 						break
 					}
