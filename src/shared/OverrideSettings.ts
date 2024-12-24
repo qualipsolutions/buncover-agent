@@ -126,10 +126,12 @@ function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string)
 
 	// Create decorations for uncovered lines
 	const decorationType = vscode.window.createTextEditorDecorationType({
-		backgroundColor: new vscode.ThemeColor("errorForeground"),
+		backgroundColor: "rgba(255, 0, 0, 0.2)", // Light red with 20% opacity
 		isWholeLine: true,
 		overviewRulerColor: new vscode.ThemeColor("errorForeground"),
 		overviewRulerLane: vscode.OverviewRulerLane.Right,
+		color: "inherit", // Ensures text color remains unchanged
+		fontWeight: "normal",
 	})
 
 	// Apply decorations
