@@ -1,4 +1,5 @@
 import * as vscode from "vscode"
+import * as path from "path"
 
 export const extensionName = "BunCover"
 export const extensionThemeIcon = new vscode.ThemeIcon("bug")
@@ -85,14 +86,32 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 	handleTerminalLink(link: vscode.TerminalLink): vscode.ProviderResult<void> {
 		const fileLink = link as FileLink
 
+		// Get the workspace folders
+		const workspaceFolders = vscode.workspace.workspaceFolders
+		if (!workspaceFolders) {
+			vscode.window.showErrorMessage("No workspace folder is opened")
+			return
+		}
+
+		// Try to find the file in the workspace
+		const workspaceRoot = workspaceFolders[0].uri.fsPath
+		const absolutePath = vscode.Uri.file(
+			path.isAbsolute(fileLink.filePath) ? fileLink.filePath : path.join(workspaceRoot, fileLink.filePath),
+		)
+
 		// Open the file and highlight uncovered lines
-		vscode.workspace.openTextDocument(fileLink.filePath).then((doc) => {
-			vscode.window.showTextDocument(doc).then((editor) => {
-				if (fileLink.uncoveredLines) {
-					highlightUncoveredLines(editor, fileLink.uncoveredLines)
-				}
-			})
-		})
+		vscode.workspace.openTextDocument(absolutePath).then(
+			(doc) => {
+				vscode.window.showTextDocument(doc).then((editor) => {
+					if (fileLink.uncoveredLines) {
+						highlightUncoveredLines(editor, fileLink.uncoveredLines)
+					}
+				})
+			},
+			(error) => {
+				vscode.window.showErrorMessage(`Failed to open file: ${error.message}`)
+			},
+		)
 	}
 }
 function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string) {
