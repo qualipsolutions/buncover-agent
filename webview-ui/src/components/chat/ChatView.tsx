@@ -841,7 +841,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								display: "flex",
 								padding: `${primaryButtonText || secondaryButtonText || isStreaming ? "10" : "0"}px 15px 0px 15px`,
 							}}>
-							{primaryButtonText && !isStreaming && (
+							{primaryButtonText && !primaryButtonText.includes("Start New Task") && !isStreaming && (
 								<VSCodeButton
 									appearance="primary"
 									disabled={!enableButtons}

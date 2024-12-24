@@ -24,18 +24,21 @@ const AppContent = () => {
 			case "action":
 				switch (message.action!) {
 					case "settingsButtonClicked":
-						setShowSettings(true)
 						setShowHistory(false)
 						setShowMcp(false)
+						setShowCoverage(false)
+						setShowSettings(true)
 						break
 					case "historyButtonClicked":
 						setShowSettings(false)
-						setShowHistory(true)
 						setShowMcp(false)
+						setShowCoverage(false)
+						setShowHistory(true)
 						break
 					case "mcpButtonClicked":
 						setShowSettings(false)
 						setShowHistory(false)
+						setShowCoverage(false)
 						setShowMcp(true)
 						break
 					case "coverageButtonClicked":
@@ -48,6 +51,7 @@ const AppContent = () => {
 						setShowSettings(false)
 						setShowHistory(false)
 						setShowMcp(false)
+						setShowCoverage(false)
 						break
 				}
 				break

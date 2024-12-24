@@ -1,11 +1,28 @@
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import { vscode } from "../../utils/vscode"
+import { useExtensionState } from "../../context/ExtensionStateContext"
+import { useCallback } from "react"
 
 type CoverageViewProps = {
 	onDone: () => void
 }
 
 const CoverageView = ({ onDone }: CoverageViewProps) => {
+	const errorColor = "var(--vscode-errorForeground)"
+
+	const { apiConfiguration, workspaceSettings } = useExtensionState()
+
+	const accessKey = apiConfiguration?.buncoverAccessKey
+	const projectId = workspaceSettings?.buncoverProjectId
+
+	const handleRunTests = useCallback(() => {
+		if (!accessKey || !projectId) {
+			return
+		}
+		vscode.postMessage({ type: "runTests" })
+		onDone()
+	}, [accessKey, projectId, onDone])
+
 	return (
 		<div
 			style={{
@@ -43,15 +60,23 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 					to view your analytics and historical reports.
 				</div>
 
+				{!accessKey ||
+					(!projectId && (
+						<div style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
+							<span className="codicon codicon-error" style={{ color: errorColor }}></span>
+							<span style={{ color: errorColor, fontWeight: "bold", marginLeft: "2px" }}>
+								Please set your BunCover credentials and project ID in the settings.
+							</span>
+						</div>
+					))}
+
 				{/* Run Coverage Report Button */}
 				<div style={{ marginTop: "10px", width: "100%" }}>
 					<VSCodeButton
+						disabled={!accessKey || !projectId}
 						appearance="secondary"
 						style={{ width: "100%" }}
-						onClick={() => {
-							vscode.postMessage({ type: "runTests" })
-							onDone()
-						}}>
+						onClick={handleRunTests}>
 						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
 						Run Tests
 					</VSCodeButton>

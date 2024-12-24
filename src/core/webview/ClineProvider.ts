@@ -23,6 +23,8 @@ import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { AutoApprovalSettings, DEFAULT_AUTO_APPROVAL_SETTINGS } from "../../shared/AutoApprovalSettings"
+import { bunCoverRunCommand } from "../../shared/OverrideSettings"
+import { showSystemNotification } from "../../integrations/notifications"
 
 /*
 https://github.com/microsoft/vscode-webview-ui-toolkit-samples/blob/main/default/weather-webview/src/providers/WeatherViewProvider.ts
@@ -530,27 +532,16 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						const accessKey = apiConfiguration.buncoverAccessKey
 						const projectId = workspaceSettings?.buncoverProjectId
 
+						if (!accessKey || !projectId) {
+							showSystemNotification({
+								subtitle: "BunCover credentials not found",
+								message: "Please set your BunCover credentials and project ID in the settings.",
+							})
+							break
+						}
+
 						// Create task with credentials
-						const task = `Run "buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}" to generate coverage report and show the following test coverage report summary.
-
-Test Coverage Report Summary:
-
-Overall Coverage:
-• Functions: <All files % Funcs>
-• Lines: <All files % Lines>
-
-Key Metrics:
-• Total Tests: <number>
-• Files Tested: <number>
-• Test Duration: <ms>
-• Expect Calls: <number>
-• All tests passed successfully: <Yes/No>
-
-Areas Needing Attention:
-1. Files with Low Coverage:
-• <path> (<% Lines> lines, <% Funcs> functions)
-2. Files with Uncovered Lines:
-• <path>: Lines <Uncovered Lines>`
+						const task = bunCoverRunCommand(accessKey, projectId)
 
 						await this.initClineWithTask(task)
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
