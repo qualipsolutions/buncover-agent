@@ -22,6 +22,7 @@ export interface ExtensionMessage {
 		| "mcpServers"
 		| "workspaceSettings"
 		| "coverageServers"
+		| "generateTests"
 	text?: string
 	action?:
 		| "chatButtonClicked"
@@ -41,6 +42,8 @@ export interface ExtensionMessage {
 	mcpServers?: McpServer[]
 	coverageServers?: McpServer[]
 	workspaceSettings?: WorkspaceSettings
+	uncoveredLines?: number[]
+	filePath?: string
 }
 
 export interface ExtensionState {

@@ -1,5 +1,6 @@
 import * as vscode from "vscode"
 import * as path from "path"
+import { TEST_CASE_PROMPT } from "../core/prompts/testCase"
 
 export const extensionName = "BunCover"
 export const extensionThemeIcon = new vscode.ThemeIcon("bug")
@@ -12,6 +13,20 @@ export type WorkspaceSettings = {
 	buncoverProjectId?: string
 	testNamePattern?: string
 	testFilter?: string
+}
+
+export const generateTestsCommand = (params: {
+	filePath: string
+	accessKey: string
+	projectId: string
+	uncoveredLines: number[]
+}) => {
+	return TEST_CASE_PROMPT({
+		filePath: params.filePath,
+		accessKey: params.accessKey,
+		projectId: params.projectId,
+		uncoveredLines: params.uncoveredLines,
+	})
 }
 
 export const autoApproveCommands = ["buncover"]

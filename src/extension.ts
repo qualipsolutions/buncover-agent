@@ -151,6 +151,20 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	context.subscriptions.push(vscode.window.registerUriHandler({ handleUri }))
 
+	// Register the command that will be triggered by the button
+	let generateTests = vscode.commands.registerCommand("cline.generateTests", async () => {
+		const editor = vscode.window.activeTextEditor
+		if (!editor) {
+			vscode.window.showErrorMessage("No file is currently open")
+			return
+		}
+
+		const filePath = editor.document.uri.fsPath
+		sidebarProvider.postMessageToWebview({ type: "generateTests", filePath })
+	})
+
+	context.subscriptions.push(generateTests)
+
 	return createClineAPI(outputChannel, sidebarProvider)
 }
 

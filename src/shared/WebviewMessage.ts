@@ -28,6 +28,7 @@ export interface WebviewMessage {
 		| "autoApprovalSettings"
 		| "workspaceSettings"
 		| "runTests"
+		| "generateTests"
 	text?: string
 	askResponse?: ClineAskResponse
 	apiConfiguration?: ApiConfiguration
@@ -35,6 +36,8 @@ export interface WebviewMessage {
 	bool?: boolean
 	autoApprovalSettings?: AutoApprovalSettings
 	workspaceSettings?: { buncoverProjectId?: string }
+	uncoveredLines?: number[]
+	filePath?: string
 }
 
 export type ClineAskResponse = "yesButtonClicked" | "noButtonClicked" | "messageResponse"
