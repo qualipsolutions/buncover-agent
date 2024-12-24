@@ -1,4 +1,4 @@
-import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeButton, VSCodeLink, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { vscode } from "../../utils/vscode"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { useCallback } from "react"
@@ -10,7 +10,7 @@ type CoverageViewProps = {
 const CoverageView = ({ onDone }: CoverageViewProps) => {
 	const errorColor = "var(--vscode-errorForeground)"
 
-	const { apiConfiguration, workspaceSettings } = useExtensionState()
+	const { apiConfiguration, workspaceSettings, setWorkspaceSettings } = useExtensionState()
 
 	const accessKey = apiConfiguration?.buncoverAccessKey
 	const projectId = workspaceSettings?.buncoverProjectId
@@ -70,15 +70,64 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 						</div>
 					))}
 
+				<div style={{ marginBottom: "10px" }}>
+					<VSCodeTextField
+						value={workspaceSettings?.testFilter || ""}
+						style={{ width: "100%" }}
+						onInput={(e: any) =>
+							setWorkspaceSettings({
+								...workspaceSettings,
+								testFilter: e.target?.value,
+							})
+						}
+						placeholder="Enter test filter...">
+						<span style={{ fontWeight: "500" }}>Test Filter (optional)</span>
+					</VSCodeTextField>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						You can filter the set of test files to run by passing additional positional arguments. Any test
+						file with a path that matches one of the filters will run. Commonly, these filters will be file
+						or directory names; glob patterns are not yet supported. To run a specific file in the test
+						runner, make sure the path starts with ./ or / to distinguish it from a filter name.
+					</p>
+				</div>
+
+				<div style={{ marginBottom: "10px" }}>
+					<VSCodeTextField
+						value={workspaceSettings?.testNamePattern || ""}
+						style={{ width: "100%" }}
+						onInput={(e: any) =>
+							setWorkspaceSettings({
+								...workspaceSettings,
+								testNamePattern: e.target?.value,
+							})
+						}
+						placeholder="Enter test name pattern...">
+						<span style={{ fontWeight: "500" }}>Test Name Pattern (optional)</span>
+					</VSCodeTextField>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						You can filter by test name.
+					</p>
+				</div>
+
 				{/* Run Coverage Report Button */}
-				<div style={{ marginTop: "10px", width: "100%" }}>
+				<div style={{ marginTop: "30px", width: "100%" }}>
 					<VSCodeButton
 						disabled={!accessKey || !projectId}
 						appearance="secondary"
 						style={{ width: "100%" }}
 						onClick={handleRunTests}>
 						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
-						Run Tests
+						Execute Tests
 					</VSCodeButton>
 				</div>
 

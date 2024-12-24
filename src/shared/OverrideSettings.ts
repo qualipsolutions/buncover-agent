@@ -1,7 +1,23 @@
+export type WorkspaceSettings = {
+	buncoverProjectId?: string
+	testNamePattern?: string
+	testFilter?: string
+}
+
 export const autoApproveCommands = ["buncover"]
 
-export const bunCoverRunCommand = (accessKey: string, projectId: string) => {
-	return `Run "buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}" to generate coverage report and show the following test coverage report summary. The results are displayed on the terminal output.
+export const bunCoverRunCommand = (params: { accessKey: string; workspaceSettings?: WorkspaceSettings }) => {
+	let runCommand = `buncover run --no-fs --token ${params.accessKey} --env dev --project-id ${params.workspaceSettings?.buncoverProjectId}`
+
+	if (params.workspaceSettings?.testNamePattern) {
+		runCommand += ` -- --test-name-pattern ${params.workspaceSettings.testNamePattern}`
+	}
+
+	if (params.workspaceSettings?.testFilter) {
+		runCommand += ` -- ${params.workspaceSettings.testFilter}`
+	}
+
+	return `Run "${runCommand}" to generate coverage report and show the following test coverage report summary. The results are displayed on the terminal output.
 
 Test Coverage Report Summary:
 

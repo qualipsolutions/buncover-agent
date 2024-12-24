@@ -4,6 +4,7 @@ import { ApiConfiguration, ModelInfo } from "./api"
 import { AutoApprovalSettings } from "./AutoApprovalSettings"
 import { HistoryItem } from "./HistoryItem"
 import { McpServer } from "./mcp"
+import { WorkspaceSettings } from "./OverrideSettings"
 
 // webview will hold state
 export interface ExtensionMessage {
@@ -39,7 +40,7 @@ export interface ExtensionMessage {
 	openRouterModels?: Record<string, ModelInfo>
 	mcpServers?: McpServer[]
 	coverageServers?: McpServer[]
-	workspaceSettings?: { buncoverProjectId?: string }
+	workspaceSettings?: WorkspaceSettings
 }
 
 export interface ExtensionState {
@@ -51,7 +52,7 @@ export interface ExtensionState {
 	taskHistory: HistoryItem[]
 	shouldShowAnnouncement: boolean
 	autoApprovalSettings: AutoApprovalSettings
-	workspaceSettings?: { buncoverProjectId?: string }
+	workspaceSettings?: WorkspaceSettings
 }
 
 export interface ClineMessage {

@@ -23,7 +23,7 @@ import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { AutoApprovalSettings, DEFAULT_AUTO_APPROVAL_SETTINGS } from "../../shared/AutoApprovalSettings"
-import { bunCoverRunCommand } from "../../shared/OverrideSettings"
+import { bunCoverRunCommand, WorkspaceSettings } from "../../shared/OverrideSettings"
 import { showSystemNotification } from "../../integrations/notifications"
 
 /*
@@ -525,9 +525,8 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 					case "runTests": {
 						// Get BunCover credentials
 						const { apiConfiguration } = await this.getState()
-						const workspaceSettings = await this.context.workspaceState.get<{ buncoverProjectId?: string }>(
-							"workspaceSettings",
-						)
+						const workspaceSettings =
+							await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
 
 						const accessKey = apiConfiguration.buncoverAccessKey
 						const projectId = workspaceSettings?.buncoverProjectId
@@ -541,7 +540,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						}
 
 						// Create task with credentials
-						const task = bunCoverRunCommand(accessKey, projectId)
+						const task = bunCoverRunCommand({ accessKey, workspaceSettings })
 
 						await this.initClineWithTask(task)
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
@@ -866,9 +865,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	async getStateToPostToWebview() {
 		const { apiConfiguration, lastShownAnnouncementId, customInstructions, taskHistory, autoApprovalSettings } =
 			await this.getState()
-		const workspaceSettings = await this.context.workspaceState.get<{ buncoverProjectId?: string }>(
-			"workspaceSettings",
-		)
+		const workspaceSettings = await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
 		return {
 			version: this.context.extension?.packageJSON?.version ?? "",
 			apiConfiguration,

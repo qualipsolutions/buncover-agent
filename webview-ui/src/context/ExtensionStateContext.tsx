@@ -12,6 +12,7 @@ import { findLastIndex } from "../../../src/shared/array"
 import { McpServer } from "../../../src/shared/mcp"
 import { convertTextMateToHljs } from "../utils/textMateToHljs"
 import { vscode } from "../utils/vscode"
+import { WorkspaceSettings } from "../../../src/shared/OverrideSettings"
 
 interface ExtensionStateContextType extends ExtensionState {
 	didHydrateState: boolean
@@ -23,8 +24,8 @@ interface ExtensionStateContextType extends ExtensionState {
 	setApiConfiguration: (config: ApiConfiguration) => void
 	setCustomInstructions: (value?: string) => void
 	setShowAnnouncement: (value: boolean) => void
-	workspaceSettings?: { buncoverProjectId?: string }
-	setWorkspaceSettings: (settings: { buncoverProjectId?: string }) => void
+	workspaceSettings?: WorkspaceSettings
+	setWorkspaceSettings: (settings: WorkspaceSettings) => void
 }
 
 const ExtensionStateContext = createContext<ExtensionStateContextType | undefined>(undefined)
