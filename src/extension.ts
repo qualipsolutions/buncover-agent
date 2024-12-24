@@ -6,7 +6,12 @@ import { ClineProvider } from "./core/webview/ClineProvider"
 import { createClineAPI } from "./exports"
 import "./utils/path" // necessary to have access to String.prototype.toPosix
 import { DIFF_VIEW_URI_SCHEME } from "./integrations/editor/DiffViewProvider"
-import { extensionDarkIconName, extensionLightIconName, extensionName } from "./shared/OverrideSettings"
+import {
+	BunCoverTerminalLinkProvider,
+	extensionDarkIconName,
+	extensionLightIconName,
+	extensionName,
+} from "./shared/OverrideSettings"
 
 /*
 Built using https://github.com/microsoft/vscode-webview-ui-toolkit
@@ -28,6 +33,9 @@ export function activate(context: vscode.ExtensionContext) {
 	outputChannel.appendLine("Cline extension activated")
 
 	const sidebarProvider = new ClineProvider(context, outputChannel)
+
+	const linkProvider = new BunCoverTerminalLinkProvider()
+	context.subscriptions.push(vscode.window.registerTerminalLinkProvider(linkProvider))
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(ClineProvider.sideBarId, sidebarProvider, {

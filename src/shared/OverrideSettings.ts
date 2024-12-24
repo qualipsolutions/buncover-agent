@@ -55,3 +55,74 @@ Areas Needing Attention:
 
 Write a concise summary of the coverage report and provide recommendations for improving coverage.`
 }
+
+interface FileLink extends vscode.TerminalLink {
+	filePath: string
+	uncoveredLines: string
+}
+
+export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider {
+	provideTerminalLinks(context: vscode.TerminalLinkContext): vscode.TerminalLink[] {
+		const regex = /\s*([\w\/\-\.]+\.(?:ts|js))\s*\|\s*[\d\.]+\s*\|\s*[\d\.]+\s*\|\s*([\d\-,\s]+)?/
+		const matches = context.line.match(regex)
+
+		if (matches) {
+			const [_, filePath, uncoveredLines] = matches
+			return [
+				{
+					startIndex: context.line.indexOf(filePath),
+					length: filePath.length,
+					tooltip: "Open file and highlight uncovered lines",
+					// Store the data as properties of the link
+					filePath,
+					uncoveredLines,
+				} as FileLink,
+			]
+		}
+		return []
+	}
+
+	handleTerminalLink(link: vscode.TerminalLink): vscode.ProviderResult<void> {
+		const fileLink = link as FileLink
+
+		// Open the file and highlight uncovered lines
+		vscode.workspace.openTextDocument(fileLink.filePath).then((doc) => {
+			vscode.window.showTextDocument(doc).then((editor) => {
+				if (fileLink.uncoveredLines) {
+					highlightUncoveredLines(editor, fileLink.uncoveredLines)
+				}
+			})
+		})
+	}
+}
+function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string) {
+	// Parse the line numbers (handling ranges like "16,18-20,22,24-25,27-33")
+	const lines = lineNumbers.split(",").flatMap((part) => {
+		if (part.includes("-")) {
+			const [start, end] = part.split("-").map(Number)
+			return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+		}
+		return [Number(part)]
+	})
+
+	// Create decorations for uncovered lines
+	const decorationType = vscode.window.createTextEditorDecorationType({
+		backgroundColor: new vscode.ThemeColor("errorForeground"),
+		isWholeLine: true,
+		overviewRulerColor: new vscode.ThemeColor("errorForeground"),
+		overviewRulerLane: vscode.OverviewRulerLane.Right,
+	})
+
+	// Apply decorations
+	const decorationsArray = lines.map(
+		(line) => new vscode.Range(new vscode.Position(line - 1, 0), new vscode.Position(line - 1, Number.MAX_VALUE)),
+	)
+
+	editor.setDecorations(decorationType, decorationsArray)
+
+	// Scroll to first uncovered line
+	if (lines.length > 0) {
+		const firstLine = lines[0]
+		editor.revealRange(new vscode.Range(firstLine - 1, 0, firstLine - 1, 0), vscode.TextEditorRevealType.AtTop)
+	}
+}
