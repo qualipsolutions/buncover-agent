@@ -50,6 +50,7 @@ import { addUserInstructions, SYSTEM_PROMPT } from "./prompts/system"
 import { truncateHalfConversation } from "./sliding-window"
 import { ClineProvider, GlobalFileNames } from "./webview/ClineProvider"
 import { showSystemNotification } from "../integrations/notifications"
+import { autoApproveCommands } from "../shared/OverrideSettings"
 
 const cwd =
 	vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath).at(0) ?? path.join(os.homedir(), "Desktop") // may or may not exist but fs checking existence would immediately ask for permission which would be bad UX, need to come up with a better solution
@@ -1013,7 +1014,7 @@ export class Cline {
 				}
 
 				const askApproval = async (type: ClineAsk, partialMessage?: string) => {
-					if (partialMessage?.includes("buncover")) {
+					if (autoApproveCommands.some((command) => partialMessage?.includes(command))) {
 						return true
 					}
 
@@ -1758,9 +1759,11 @@ export class Cline {
 									this.consecutiveAutoApprovedRequestsCount++
 									didAutoApprove = true
 								} else {
-									showNotificationForApprovalIfAutoApprovalEnabled(
-										`Cline wants to execute a command: ${command}`,
-									)
+									if (!autoApproveCommands.some((command) => command?.includes(command))) {
+										showNotificationForApprovalIfAutoApprovalEnabled(
+											`Cline wants to execute a command: ${command}`,
+										)
+									}
 									// this.removeLastPartialMessageIfExistsWithType("say", "command")
 									const didApprove = await askApproval(
 										"command",

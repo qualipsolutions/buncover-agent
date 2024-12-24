@@ -49,7 +49,7 @@
 			"activitybar": [
 				{
 					"id": "claude-dev-ActivityBar",
-					"title": "Cline",
+					"title": "BunCover",
 					"icon": "$(robot)"
 				}
 			]
