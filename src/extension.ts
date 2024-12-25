@@ -11,6 +11,8 @@ import {
 	extensionDarkIconName,
 	extensionLightIconName,
 	extensionName,
+	generateTestsCommand,
+	WorkspaceSettings,
 } from "./shared/OverrideSettings"
 
 /*
@@ -160,7 +162,47 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const filePath = editor.document.uri.fsPath
-		sidebarProvider.postMessageToWebview({ type: "generateTests", filePath })
+		const { apiConfiguration } = await sidebarProvider.getState()
+		const accessKey = apiConfiguration?.buncoverAccessKey
+
+		const workspaceSettings =
+			await sidebarProvider.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
+		const projectId = workspaceSettings?.buncoverProjectId
+
+		if (!accessKey || !projectId) {
+			vscode.window.showErrorMessage("BunCover credentials or project ID not found")
+			return
+		}
+
+		// make sure this is not a test file
+		const isTestFile = filePath.includes(".test.")
+		if (isTestFile) {
+			vscode.window.showErrorMessage("This is a test file, please generate test code for the domain code")
+			return
+		}
+
+		const answer = await vscode.window.showInformationMessage(
+			`Are you sure you want to generate test code for ${filePath}?`,
+			"Yes",
+			"No",
+			"Cancel",
+		)
+
+		if (answer === "Yes") {
+			// Handle yes
+			const task = generateTestsCommand({
+				filePath,
+				accessKey,
+				projectId,
+				uncoveredLines: [],
+			})
+			await sidebarProvider.initClineWithTask(task)
+			await sidebarProvider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
+		} else if (answer === "No") {
+			// Handle no
+		} else {
+			// Handle cancel
+		}
 	})
 
 	context.subscriptions.push(generateTests)

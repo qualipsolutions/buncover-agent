@@ -551,33 +551,6 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
 						break
 					}
-					case "generateTests": {
-						const { apiConfiguration } = await this.getState()
-						const workspaceSettings =
-							await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
-
-						const accessKey = apiConfiguration.buncoverAccessKey
-						const projectId = workspaceSettings?.buncoverProjectId
-
-						if (!accessKey || !projectId) {
-							showSystemNotification({
-								subtitle: "BunCover credentials not found",
-								message: "Please set your BunCover credentials and project ID in the settings.",
-							})
-							break
-						}
-
-						const task = generateTestsCommand({
-							filePath: message.filePath || "",
-							accessKey,
-							projectId,
-							uncoveredLines: [],
-						})
-						await this.initClineWithTask(task)
-						await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
-
-						break
-					}
 					// Add more switch case statements here as more webview message commands
 					// are created within the webview context (i.e. inside media/main.js)
 				}

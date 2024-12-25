@@ -121,10 +121,52 @@ export const TEST_CASE_PROMPT = ({ filePath, uncoveredLines, accessKey, projectI
 	const guidelines = generateTestingGuidelines()
 
 	let runCommand = `buncover run --no-fs --token ${accessKey} --env dev --project-id ${projectId}`
-	runCommand += ` -- ${filePath}`
+
+	const runCommandWithPreloader = `${runCommand} -- --preload-file <preload-file-path>`
 
 	return `
-Generate comprehensive test cases for ${filePath} covering lines: ${uncoveredLines.join(", ")}. Create the test case file is one is not already created at location "tests/buncover/${filePath}".
+Generate comprehensive test cases for ${filePath} covering lines: ${uncoveredLines.join(", ")}.
+
+When generating test cases files, please follow these specific organization requirements:
+
+1. Create all test files within a "buncover" folder
+2. Place the "buncover" folder inside the project's existing test directory
+3. Mirror the exact subfolder structure of the domain code being tested
+4. IMPORTANT: Never modify the domain code - even if tests are failing
+   - Your task is to write tests that work with the existing code
+   - If you encounter difficulties, focus on understanding the current implementation
+   - Do not suggest or make changes to the domain code itself
+5. IMPORTANT: Do not install or suggest installing any new packages
+   - All required packages are already installed in the project
+   - If you find yourself wanting to install a package, this indicates you're trying to use the wrong package
+   - Use only the existing packages and imports available in the project
+   - If you need a specific functionality, check the existing codebase for similar tests to see which packages are being used
+
+For example, if the domain code structure is:
+src/
+  domain/
+    user/
+      UserService.js
+    auth/
+      AuthService.js
+  tests/
+
+Then organize the test files as:
+src/
+  tests/
+    buncover/
+      domain/
+        user/
+          UserService.test.js
+        auth/
+          AuthService.test.js
+
+Please ensure that:
+- Each test file name matches its corresponding domain file with ".test" added before the extension
+- All subfolder names and hierarchy exactly match the domain code structure
+- Test files are placed in corresponding subfolders that match their domain code location
+- You work within the constraints of the existing domain code implementation
+- You only use packages that are already installed in the project
 
 ${imports}
 
@@ -143,5 +185,7 @@ Requirements:
 7. Follow project conventions
 
 When the test generation is complete, run command "${runCommand}" to generate coverage report and fix any failed tests.
+
+If you need run with the preload option, use command "${runCommandWithPreloader}" to generate coverage report and fix any failed tests.
 `
 }
