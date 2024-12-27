@@ -9,7 +9,7 @@ interface AnnouncementProps {
 	hideAnnouncement: () => void
 }
 /*
-You must update the latestAnnouncementId in ClineProvider for new announcements to show to users. This new id will be compared with whats in state for the 'last announcement shown', and if it's different then the announcement will render. As soon as an announcement is shown, the id will be updated in state. This ensures that announcements are not shown more than once, even if the user doesn't close it themselves.
+You must update the latestAnnouncementId in BunCoverProvider for new announcements to show to users. This new id will be compared with whats in state for the 'last announcement shown', and if it's different then the announcement will render. As soon as an announcement is shown, the id will be updated in state. This ensures that announcements are not shown more than once, even if the user doesn't close it themselves.
 */
 const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 	const minorVersion = version.split(".").slice(0, 2).join(".") // 2.0.0 -> 2.0
@@ -34,87 +34,33 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 			</h3>
 			<ul style={{ margin: "0 0 8px", paddingLeft: "12px" }}>
 				<li>
-					<b>Auto-approve menu:</b> You can now specify which tools require approval, set a max # of
-					auto-approved API requests, and enable system notifications for when Cline completes a task.
+					<b>Test Coverage Analysis:</b> BunCover now provides detailed test coverage analysis for your Bun
+					projects, helping you identify untested code paths and improve test quality.
 				</li>
 				<li>
-					<b>New diff editing for large files:</b> Cline now uses an efficient search & replace approach when
-					modifying large files for faster, more reliable edits (no more "
-					<code>{"// rest of code here"}</code>" deletions).
+					<b>AI-Powered Test Generation:</b> Automatically generate test cases for your Bun projects with
+					intelligent analysis of your codebase.
 				</li>
 				<li>
-					<b>.clinerules:</b> Add a root-level <code>.clinerules</code> file to specify custom instructions
-					for the project.
+					<b>.buncoverrules:</b> Add a root-level <code>.buncoverrules</code> file to specify custom test
+					coverage rules and patterns for your project.
 				</li>
 			</ul>
-			<p style={{ margin: "5px 0px", fontWeight: "bold" }}>v2.2 Updates:</p>
+			<p style={{ margin: "5px 0px", fontWeight: "bold" }}>Latest Updates:</p>
 			<ul style={{ margin: "0 0 8px", paddingLeft: "12px" }}>
 				<li>
-					Add and configure{" "}
-					<VSCodeLink href="https://github.com/modelcontextprotocol/servers" style={{ display: "inline" }}>
-						MCP servers
-					</VSCodeLink>
-					by clicking the new <span className="codicon codicon-server" style={{ fontSize: "10px" }}></span>{" "}
-					icon in the menu bar.
+					<b>Real-time Coverage Updates:</b> Watch your test coverage improve in real-time as you write tests
+					or let BunCover generate them for you.
 				</li>
 				<li>
-					Cline can also create custom tools–just say "add a tool that...", and watch him create the MCP
-					server and install it in the extension, ready to use in future tasks.
+					<b>Coverage Insights:</b> Get detailed insights into your test coverage, including branch, line, and
+					function coverage metrics.
 				</li>
 				<li>
-					Try it yourself by asking Cline to "add a tool that gets the latest npm docs", or
-					<VSCodeLink href="https://x.com/sdrzn/status/1867271665086074969" style={{ display: "inline" }}>
-						see a demo of MCP in action here.
-					</VSCodeLink>
+					<b>Custom Rules:</b> Define custom coverage rules and thresholds for different parts of your
+					codebase using the .buncoverrules file.
 				</li>
 			</ul>
-			{/*<ul style={{ margin: "0 0 8px", paddingLeft: "12px" }}>
-				 <li>
-					OpenRouter now supports prompt caching! They also have much higher rate limits than other providers,
-					so I recommend trying them out.
-					<br />
-					{!apiConfiguration?.openRouterApiKey && (
-						<VSCodeButtonLink
-							href={getOpenRouterAuthUrl(vscodeUriScheme)}
-							style={{
-								transform: "scale(0.85)",
-								transformOrigin: "left center",
-								margin: "4px -30px 2px 0",
-							}}>
-							Get OpenRouter API Key
-						</VSCodeButtonLink>
-					)}
-					{apiConfiguration?.openRouterApiKey && apiConfiguration?.apiProvider !== "openrouter" && (
-						<VSCodeButton
-							onClick={() => {
-								vscode.postMessage({
-									type: "apiConfiguration",
-									apiConfiguration: { ...apiConfiguration, apiProvider: "openrouter" },
-								})
-							}}
-							style={{
-								transform: "scale(0.85)",
-								transformOrigin: "left center",
-								margin: "4px -30px 2px 0",
-							}}>
-							Switch to OpenRouter
-						</VSCodeButton>
-					)}
-				</li> 
-				<li>
-					<b>Edit Cline's changes before accepting!</b> When he creates or edits a file, you can modify his
-					changes directly in the right side of the diff view (+ hover over the 'Revert Block' arrow button in
-					the center to undo "<code>{"// rest of code here"}</code>" shenanigans)
-				</li>
-				<li>
-					New <code>search_files</code> tool that lets Cline perform regex searches in your project, letting
-					him refactor code, address TODOs and FIXMEs, remove dead code, and more!
-				</li>
-				<li>
-					When Cline runs commands, you can now type directly in the terminal (+ support for Python
-					environments)
-				</li>
-			</ul>*/}
 			<div
 				style={{
 					height: "1px",
@@ -124,11 +70,11 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 				}}
 			/>
 			<p style={{ margin: "0" }}>
-				Join
-				<VSCodeLink style={{ display: "inline" }} href="https://discord.gg/cline">
-					discord.gg/cline
+				Visit
+				<VSCodeLink style={{ display: "inline" }} href="https://buncover.dev">
+					buncover.dev
 				</VSCodeLink>
-				for more updates!
+				for documentation and updates!
 			</p>
 		</div>
 	)

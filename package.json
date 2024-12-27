@@ -48,59 +48,59 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "claude-dev-ActivityBar",
+					"id": "buncover-ActivityBar",
 					"title": "BunCover",
 					"icon": "$(bug)"
 				}
 			]
 		},
 		"views": {
-			"claude-dev-ActivityBar": [
+			"buncover-ActivityBar": [
 				{
 					"type": "webview",
-					"id": "claude-dev.SidebarProvider",
+					"id": "buncover.SidebarProvider",
 					"name": ""
 				}
 			]
 		},
 		"commands": [
 			{
-				"command": "cline.plusButtonClicked",
+				"command": "buncover.plusButtonClicked",
 				"title": "New Task",
 				"icon": "$(add)"
 			},
 			{
-				"command": "cline.mcpButtonClicked",
+				"command": "buncover.mcpButtonClicked",
 				"title": "MCP Servers",
 				"icon": "$(server)"
 			},
 			{
-				"command": "cline.historyButtonClicked",
+				"command": "buncover.historyButtonClicked",
 				"title": "History",
 				"icon": "$(history)"
 			},
 			{
-				"command": "cline.popoutButtonClicked",
+				"command": "buncover.popoutButtonClicked",
 				"title": "Open in Editor",
 				"icon": "$(link-external)"
 			},
 			{
-				"command": "cline.settingsButtonClicked",
+				"command": "buncover.settingsButtonClicked",
 				"title": "Settings",
 				"icon": "$(settings-gear)"
 			},
 			{
-				"command": "cline.openInNewTab",
+				"command": "buncover.openInNewTab",
 				"title": "Open In New Tab",
-				"category": "Cline"
+				"category": "BunCover"
 			},
 			{
-				"command": "cline.coverageButtonClicked",
+				"command": "buncover.coverageButtonClicked",
 				"title": "Coverage",
 				"icon": "$(run-coverage)"
 			},
 			{
-				"command": "cline.generateTests",
+				"command": "buncover.generateTests",
 				"title": "Generate test case for the current file",
 				"icon": "$(zap)"
 			}
@@ -108,39 +108,39 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "cline.plusButtonClicked",
+					"command": "buncover.plusButtonClicked",
 					"group": "navigation@1",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.coverageButtonClicked",
+					"command": "buncover.coverageButtonClicked",
 					"group": "navigation@2",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.generateTests",
+					"command": "buncover.generateTests",
 					"group": "navigation@3",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.mcpButtonClicked",
+					"command": "buncover.mcpButtonClicked",
 					"group": "navigation@4",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.historyButtonClicked",
+					"command": "buncover.historyButtonClicked",
 					"group": "navigation@5",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.popoutButtonClicked",
+					"command": "buncover.popoutButtonClicked",
 					"group": "navigation@6",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "cline.settingsButtonClicked",
+					"command": "buncover.settingsButtonClicked",
 					"group": "navigation@7",
-					"when": "view == claude-dev.SidebarProvider"
+					"when": "view == buncover.SidebarProvider"
 				}
 			]
 		}

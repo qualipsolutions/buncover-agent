@@ -70,16 +70,16 @@ type GlobalStateKey =
 	| "autoApprovalSettings"
 
 export const GlobalFileNames = {
-	apiConversationHistory: "api_conversation_history.json",
-	uiMessages: "ui_messages.json",
-	openRouterModels: "openrouter_models.json",
-	mcpSettings: "cline_mcp_settings.json",
-	clineRules: ".clinerules",
+	apiConversationHistory: "buncover_api_conversation_history.json",
+	uiMessages: "buncover_ui_messages.json",
+	openRouterModels: "buncover_openrouter_models.json",
+	mcpSettings: "buncover_mcp_settings.json",
+	clineRules: ".buncoverrules",
 }
 
 export class ClineProvider implements vscode.WebviewViewProvider {
-	public static readonly sideBarId = "claude-dev.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
-	public static readonly tabPanelId = "claude-dev.TabPanelProvider"
+	public static readonly sideBarId = "buncover.SidebarProvider"
+	public static readonly tabPanelId = "buncover.TabPanelProvider"
 	private static activeInstances: Set<ClineProvider> = new Set()
 	private disposables: vscode.Disposable[] = []
 	private view?: vscode.WebviewView | vscode.WebviewPanel
@@ -576,7 +576,7 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		try {
 			await fs.mkdir(mcpServersDir, { recursive: true })
 		} catch (error) {
-			return "~/Documents/Cline/MCP" // in case creating a directory in documents fails for whatever reason (e.g. permissions) - this is fine since this path is only ever used in the system prompt
+			return "~/Documents/BunCover/MCP" // in case creating a directory in documents fails for whatever reason
 		}
 		return mcpServersDir
 	}

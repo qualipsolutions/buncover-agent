@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.plusButtonClicked", async () => {
+		vscode.commands.registerCommand("buncover.plusButtonClicked", async () => {
 			outputChannel.appendLine("Plus button Clicked")
 			await sidebarProvider.clearTask()
 			await sidebarProvider.postStateToWebview()
@@ -55,13 +55,13 @@ export function activate(context: vscode.ExtensionContext) {
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.mcpButtonClicked", () => {
+		vscode.commands.registerCommand("buncover.mcpButtonClicked", () => {
 			sidebarProvider.postMessageToWebview({ type: "action", action: "mcpButtonClicked" })
 		}),
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.coverageButtonClicked", () => {
+		vscode.commands.registerCommand("buncover.coverageButtonClicked", () => {
 			sidebarProvider.postMessageToWebview({ type: "action", action: "coverageButtonClicked" })
 		}),
 	)
@@ -99,18 +99,18 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.commands.executeCommand("workbench.action.lockEditorGroup")
 	}
 
-	context.subscriptions.push(vscode.commands.registerCommand("cline.popoutButtonClicked", openClineInNewTab))
-	context.subscriptions.push(vscode.commands.registerCommand("cline.openInNewTab", openClineInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("buncover.popoutButtonClicked", openClineInNewTab))
+	context.subscriptions.push(vscode.commands.registerCommand("buncover.openInNewTab", openClineInNewTab))
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.settingsButtonClicked", () => {
+		vscode.commands.registerCommand("buncover.settingsButtonClicked", () => {
 			//vscode.window.showInformationMessage(message)
 			sidebarProvider.postMessageToWebview({ type: "action", action: "settingsButtonClicked" })
 		}),
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.historyButtonClicked", () => {
+		vscode.commands.registerCommand("buncover.historyButtonClicked", () => {
 			sidebarProvider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
 		}),
 	)
@@ -154,7 +154,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.window.registerUriHandler({ handleUri }))
 
 	// Register the command that will be triggered by the button
-	let generateTests = vscode.commands.registerCommand("cline.generateTests", async () => {
+	let generateTests = vscode.commands.registerCommand("buncover.generateTests", async () => {
 		const editor = vscode.window.activeTextEditor
 		if (!editor) {
 			vscode.window.showErrorMessage("No file is currently open")

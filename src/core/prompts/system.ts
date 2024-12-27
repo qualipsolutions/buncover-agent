@@ -7,7 +7,7 @@ export const SYSTEM_PROMPT = async (
 	cwd: string,
 	supportsComputerUse: boolean,
 	mcpHub: McpHub,
-) => `You are Cline, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are BunCover, a highly skilled software engineer specializing in test coverage analysis and test generation for Bun projects. You have extensive knowledge in testing practices, code coverage tools, and best practices for writing effective tests.
 
 ====
 

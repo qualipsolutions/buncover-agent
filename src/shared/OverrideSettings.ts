@@ -114,6 +114,8 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 			path.isAbsolute(fileLink.filePath) ? fileLink.filePath : path.join(workspaceRoot, fileLink.filePath),
 		)
 
+		// TODO: save state of the current file and uncovered lines
+
 		// Open the file and highlight uncovered lines
 		vscode.workspace.openTextDocument(absolutePath).then(
 			(doc) => {
