@@ -42,7 +42,7 @@ export const bunCoverRunCommand = (params: { accessKey: string; workspaceSetting
 		runCommand += ` -- ${params.workspaceSettings.testFilter}`
 	}
 
-	return `Run "${runCommand}" to generate coverage report and show the following test coverage report summary. The results are displayed on the terminal output.
+	return `Run "${runCommand}" to generate coverage report and show the following test coverage report summary. The results are displayed on the terminal output. If you don't see the command output, try to run the command again.
 
 Test Coverage Report Summary:
 

@@ -141,7 +141,29 @@ When generating test cases files, please follow these specific organization requ
    - If you find yourself wanting to install a package, this indicates you're trying to use the wrong package
    - Use only the existing packages and imports available in the project
    - If you need a specific functionality, check the existing codebase for similar tests to see which packages are being used
-
+6. For Preloader Requirements:
+   - First search the entire test directory and its subfolders for existing "preloader.ts", "preloader.js", "preloader.test.ts", or "preloader.test.js"
+   - If found:
+     * DO NOT modify any existing code in the preloader file
+     * Other tests depend on the existing preloader code
+     * Only add new code required for your specific tests
+     * Place new code at the end of the appropriate sections
+   - If not found, create a new "preloader.test.{ts,js}" file using the appropriate extension that matches the project's setup
+   - Place the new preloader file in the appropriate location based on existing project conventions
+7. IMPORTANT: Study Existing Test Patterns:
+   - Before writing new tests, examine existing test files in the project
+   - Understand and follow the project's established testing patterns for:
+     * Mock implementation approaches
+     * Common testing utilities and helpers
+     * Assertion styles and patterns
+     * Setup and teardown conventions
+   - Use the same mocking libraries and techniques as other tests in the project
+   - Follow similar patterns for handling dependencies and external services
+8. IMPORTANT: Coverage Run Requirements:
+   - Always run full coverage without any test file filters
+   - Do not specify individual test files or patterns in the buncover run command
+   - Each run should analyze coverage for the entire test suite
+   
 For example, if the domain code structure is:
 src/
   domain/
@@ -167,6 +189,9 @@ Please ensure that:
 - Test files are placed in corresponding subfolders that match their domain code location
 - You work within the constraints of the existing domain code implementation
 - You only use packages that are already installed in the project
+- You properly handle preloader file requirements by first checking for existing files and never modifying existing code
+- You follow the project's established testing patterns and conventions
+- You run full coverage analysis without file filters
 
 ${imports}
 
@@ -184,7 +209,7 @@ Requirements:
 6. Mock external dependencies
 7. Follow project conventions
 
-When the test generation is complete, run command "${runCommand}" to generate coverage report and fix any failed tests.
+When the test generation is complete, run command "${runCommand}" to generate coverage report and fix any failed tests. If you don't see the command output, try to run the command again.
 
 If you need run with the preload option, use command "${runCommandWithPreloader}" to generate coverage report and fix any failed tests.
 `
