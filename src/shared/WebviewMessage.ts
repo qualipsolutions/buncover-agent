@@ -34,7 +34,13 @@ export interface WebviewMessage {
 	images?: string[]
 	bool?: boolean
 	autoApprovalSettings?: AutoApprovalSettings
-	workspaceSettings?: { buncoverProjectId?: string }
+	workspaceSettings?: {
+		buncoverProjectId?: string
+		testNamePattern?: string
+		testFilter?: string
+		filePath?: string
+		uncoveredLines?: number[]
+	}
 }
 
 export type ClineAskResponse = "yesButtonClicked" | "noButtonClicked" | "messageResponse"

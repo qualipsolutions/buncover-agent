@@ -560,6 +560,14 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		)
 	}
 
+	async updateWorkspaceSettings(workspaceSettings: WorkspaceSettings) {
+		if (!workspaceSettings) {
+			return
+		}
+		await this.context.workspaceState.update("workspaceSettings", workspaceSettings)
+		await this.postStateToWebview()
+	}
+
 	async updateCustomInstructions(instructions?: string) {
 		// User may be clearing the field
 		await this.updateGlobalState("customInstructions", instructions || undefined)

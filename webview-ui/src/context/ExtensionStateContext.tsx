@@ -37,6 +37,13 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 		taskHistory: [],
 		shouldShowAnnouncement: false,
 		autoApprovalSettings: DEFAULT_AUTO_APPROVAL_SETTINGS,
+		workspaceSettings: {
+			buncoverProjectId: "",
+			testNamePattern: "",
+			testFilter: "",
+			filePath: "",
+			uncoveredLines: [],
+		},
 	})
 	const [didHydrateState, setDidHydrateState] = useState(false)
 	const [showWelcome, setShowWelcome] = useState(false)

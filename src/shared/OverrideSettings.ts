@@ -13,6 +13,8 @@ export type WorkspaceSettings = {
 	buncoverProjectId?: string
 	testNamePattern?: string
 	testFilter?: string
+	filePath?: string
+	uncoveredLines?: number[]
 }
 
 export const generateTestsCommand = (params: {
