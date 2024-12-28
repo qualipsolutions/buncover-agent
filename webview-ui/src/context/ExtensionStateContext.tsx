@@ -43,6 +43,7 @@ export const ExtensionStateContextProvider: React.FC<{ children: React.ReactNode
 			testFilter: "",
 			filePath: "",
 			uncoveredLines: [],
+			testInstructions: "",
 		},
 	})
 	const [didHydrateState, setDidHydrateState] = useState(false)

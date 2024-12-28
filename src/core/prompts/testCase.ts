@@ -52,6 +52,7 @@ interface PromptContext {
 	projectId: string
 	filePath: string
 	uncoveredLines: number[]
+	testInstructions?: string
 }
 
 const generateImportsSection = (testRunner: TestRunner): string => {
@@ -589,7 +590,13 @@ If you need run with the preload option, use command "${runCommandWithPreloader}
   `
 }
 
-export const TEST_CASE_PROMPT = ({ filePath, uncoveredLines, accessKey, projectId }: PromptContext): string => {
+export const TEST_CASE_PROMPT = ({
+	filePath,
+	uncoveredLines,
+	accessKey,
+	projectId,
+	testInstructions,
+}: PromptContext): string => {
 	const imports = generateImportsSection("bun")
 	const mockingGuide = generateMockingGuide("bun")
 	const guidelines = generateTestingGuidelines()
@@ -599,5 +606,9 @@ export const TEST_CASE_PROMPT = ({ filePath, uncoveredLines, accessKey, projectI
 	const runCommandWithPreloader = `${runCommand} -- --preload-file <preload-file-path>`
 
 	// return promptV1(filePath, uncoveredLines, imports, mockingGuide, guidelines, runCommand, runCommandWithPreloader)
-	return [promptV2(filePath, uncoveredLines, runCommand, runCommandWithPreloader), mongooseMockingGuide].join("\n\n")
+	return [
+		promptV2(filePath, uncoveredLines, runCommand, runCommandWithPreloader),
+		mongooseMockingGuide,
+		testInstructions,
+	].join("\n\n")
 }

@@ -1,4 +1,4 @@
-import { VSCodeButton, VSCodeLink, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeButton, VSCodeLink, VSCodeTextArea, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { vscode } from "../../utils/vscode"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { useCallback } from "react"
@@ -116,6 +116,30 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 							color: "var(--vscode-descriptionForeground)",
 						}}>
 						You can filter by test name.
+					</p>
+				</div>
+
+				<div style={{ marginBottom: 5 }}>
+					<VSCodeTextArea
+						value={workspaceSettings?.testInstructions ?? ""}
+						style={{ width: "100%" }}
+						rows={4}
+						placeholder={'e.g. "Use file <path/to/file.js> as an example on how to mock the models"'}
+						onInput={(e: any) =>
+							setWorkspaceSettings({
+								...workspaceSettings,
+								testInstructions: e.target?.value ?? "",
+							})
+						}>
+						<span style={{ fontWeight: "500" }}>Custom Instructions</span>
+					</VSCodeTextArea>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						These instructions are added to the end of the system prompt sent with every request.
 					</p>
 				</div>
 

@@ -16,6 +16,7 @@ export type WorkspaceSettings = {
 	testFilter?: string
 	filePath?: string
 	uncoveredLines?: number[]
+	testInstructions?: string
 }
 
 export const generateTestsCommand = (params: {
@@ -23,6 +24,7 @@ export const generateTestsCommand = (params: {
 	accessKey: string
 	projectId: string
 	uncoveredLines: number[]
+	testInstructions: string
 }) => {
 	console.log("generateTests", {
 		filePath: params.filePath,
@@ -33,6 +35,7 @@ export const generateTestsCommand = (params: {
 		accessKey: params.accessKey,
 		projectId: params.projectId,
 		uncoveredLines: params.uncoveredLines,
+		testInstructions: params.testInstructions,
 	})
 }
 

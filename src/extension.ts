@@ -186,8 +186,10 @@ export function activate(context: vscode.ExtensionContext) {
 			workspaceSettings,
 		})
 
+		const uncoveredLines = workspaceSettings?.filePath === filePath ? (workspaceSettings?.uncoveredLines ?? []) : []
+
 		const answer = await vscode.window.showInformationMessage(
-			`Are you sure you want to generate test code for ${filePath}?`,
+			`Are you sure you want to generate test code for ${filePath} with uncovered lines ${uncoveredLines.join(", ")}?`,
 			"Yes",
 			"No",
 			"Cancel",
@@ -199,8 +201,8 @@ export function activate(context: vscode.ExtensionContext) {
 				filePath,
 				accessKey,
 				projectId,
-				uncoveredLines:
-					workspaceSettings?.filePath === filePath ? (workspaceSettings?.uncoveredLines ?? []) : [],
+				uncoveredLines,
+				testInstructions: workspaceSettings?.testInstructions ?? "",
 			})
 			await sidebarProvider.initClineWithTask(task)
 			await sidebarProvider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })

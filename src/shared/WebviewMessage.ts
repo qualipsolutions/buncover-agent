@@ -40,6 +40,7 @@ export interface WebviewMessage {
 		testFilter?: string
 		filePath?: string
 		uncoveredLines?: number[]
+		testInstructions?: string
 	}
 }
 
