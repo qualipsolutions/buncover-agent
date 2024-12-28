@@ -34,4 +34,16 @@ export interface ClineAPI {
 	 * Simulates pressing the secondary button in the chat interface.
 	 */
 	pressSecondaryButton(): Promise<void>
+
+	/**
+	 * Sets the workspace settings.
+	 * @param workspaceSettings The workspace settings to be saved.
+	 */
+	setWorkspaceSettings(workspaceSettings: WorkspaceSettings): Promise<void>
+
+	/**
+	 * Gets the workspace settings.
+	 * @returns The saved workspace settings, or undefined if not set.
+	 */
+	getWorkspaceSettings(): Promise<WorkspaceSettings | undefined>
 }

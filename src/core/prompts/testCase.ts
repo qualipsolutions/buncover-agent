@@ -444,9 +444,20 @@ const promptV1 = (
   `
 }
 
-const promptV2 = (filePath: string, runCommand: string, runCommandWithPreloader: string): string => {
+const promptV2 = (
+	filePath: string,
+	uncoveredLines: number[],
+	runCommand: string,
+	runCommandWithPreloader: string,
+): string => {
+	let lines = ""
+
+	if (uncoveredLines.length > 0) {
+		lines = ` and focus on lines: [${uncoveredLines.join(", ")}]`
+	}
+
 	return `
-  Generate **comprehensive, high-quality test cases** for '${filePath}', adhering to the following requirements and best practices. All tests will be run using the **Bun Test Runner**.
+  Generate **comprehensive, high-quality test cases** for '${filePath}'${lines}, adhering to the following requirements and best practices. All tests will be run using the **Bun Test Runner**.
 
 When the test generation is complete, run command "${runCommand}" to generate coverage report and fix any failed tests. If you don't see the command output, try to run the command again.
 
@@ -588,5 +599,5 @@ export const TEST_CASE_PROMPT = ({ filePath, uncoveredLines, accessKey, projectI
 	const runCommandWithPreloader = `${runCommand} -- --preload-file <preload-file-path>`
 
 	// return promptV1(filePath, uncoveredLines, imports, mockingGuide, guidelines, runCommand, runCommandWithPreloader)
-	return [promptV2(filePath, runCommand, runCommandWithPreloader), mongooseMockingGuide].join("\n\n")
+	return [promptV2(filePath, uncoveredLines, runCommand, runCommandWithPreloader), mongooseMockingGuide].join("\n\n")
 }

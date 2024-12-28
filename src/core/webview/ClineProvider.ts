@@ -23,12 +23,7 @@ import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { AutoApprovalSettings, DEFAULT_AUTO_APPROVAL_SETTINGS } from "../../shared/AutoApprovalSettings"
-import {
-	bunCoverRunCommand,
-	extensionName,
-	generateTestsCommand,
-	WorkspaceSettings,
-} from "../../shared/OverrideSettings"
+import { bunCoverRunCommand, extensionName, WorkspaceSettings } from "../../shared/OverrideSettings"
 import { showSystemNotification } from "../../integrations/notifications"
 
 /*
@@ -209,16 +204,27 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 	async initClineWithTask(task?: string, images?: string[]) {
 		await this.clearTask() // ensures that an exising task doesn't exist before starting a new one, although this shouldn't be possible since user must clear task before starting a new one
 		const { apiConfiguration, customInstructions, autoApprovalSettings } = await this.getState()
-		this.cline = new Cline(this, apiConfiguration, autoApprovalSettings, customInstructions, task, images)
+		const workspaceSettings = await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
+		this.cline = new Cline(
+			this,
+			apiConfiguration,
+			autoApprovalSettings,
+			workspaceSettings || {},
+			customInstructions,
+			task,
+			images,
+		)
 	}
 
 	async initClineWithHistoryItem(historyItem: HistoryItem) {
 		await this.clearTask()
 		const { apiConfiguration, customInstructions, autoApprovalSettings } = await this.getState()
+		const workspaceSettings = await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
 		this.cline = new Cline(
 			this,
 			apiConfiguration,
 			autoApprovalSettings,
+			workspaceSettings || {},
 			customInstructions,
 			undefined,
 			undefined,
@@ -565,6 +571,9 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 			return
 		}
 		await this.context.workspaceState.update("workspaceSettings", workspaceSettings)
+		if (this.cline) {
+			this.cline.workspaceSettings = workspaceSettings
+		}
 		await this.postStateToWebview()
 	}
 

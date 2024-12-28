@@ -181,6 +181,11 @@ export function activate(context: vscode.ExtensionContext) {
 			return
 		}
 
+		console.log("generateTests", {
+			filePath,
+			workspaceSettings,
+		})
+
 		const answer = await vscode.window.showInformationMessage(
 			`Are you sure you want to generate test code for ${filePath}?`,
 			"Yes",
@@ -194,7 +199,8 @@ export function activate(context: vscode.ExtensionContext) {
 				filePath,
 				accessKey,
 				projectId,
-				uncoveredLines: [],
+				uncoveredLines:
+					workspaceSettings?.filePath === filePath ? (workspaceSettings?.uncoveredLines ?? []) : [],
 			})
 			await sidebarProvider.initClineWithTask(task)
 			await sidebarProvider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })

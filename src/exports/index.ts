@@ -1,9 +1,19 @@
 import * as vscode from "vscode"
 import { ClineProvider } from "../core/webview/ClineProvider"
 import { ClineAPI } from "./cline"
+import { WorkspaceSettings } from "../shared/OverrideSettings"
 
 export function createClineAPI(outputChannel: vscode.OutputChannel, sidebarProvider: ClineProvider): ClineAPI {
 	const api: ClineAPI = {
+		setWorkspaceSettings: async (workspaceSettings: WorkspaceSettings) => {
+			await sidebarProvider.updateWorkspaceSettings(workspaceSettings)
+			outputChannel.appendLine("Workspace settings set")
+		},
+
+		getWorkspaceSettings: async () => {
+			return await sidebarProvider.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
+		},
+
 		setCustomInstructions: async (value: string) => {
 			await sidebarProvider.updateCustomInstructions(value)
 			outputChannel.appendLine("Custom instructions set")

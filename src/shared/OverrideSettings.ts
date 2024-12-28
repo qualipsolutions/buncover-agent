@@ -1,6 +1,7 @@
 import * as vscode from "vscode"
 import * as path from "path"
 import { TEST_CASE_PROMPT } from "../core/prompts/testCase"
+import { ClineAPI } from "../exports/cline"
 
 export const extensionName = "BunCover"
 export const extensionThemeIcon = new vscode.ThemeIcon("bug")
@@ -23,6 +24,10 @@ export const generateTestsCommand = (params: {
 	projectId: string
 	uncoveredLines: number[]
 }) => {
+	console.log("generateTests", {
+		filePath: params.filePath,
+		uncoveredLines: params.uncoveredLines,
+	})
 	return TEST_CASE_PROMPT({
 		filePath: params.filePath,
 		accessKey: params.accessKey,
@@ -116,7 +121,27 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 			path.isAbsolute(fileLink.filePath) ? fileLink.filePath : path.join(workspaceRoot, fileLink.filePath),
 		)
 
-		// TODO: save state of the current file and uncovered lines
+		// Parse uncovered lines
+		const uncoveredLines = fileLink.uncoveredLines.split(",").flatMap((part) => {
+			if (part.includes("-")) {
+				const [start, end] = part.split("-").map(Number)
+				return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+			}
+			return [Number(part)]
+		})
+
+		// Get the ClineProvider instance and update workspace settings
+		const extension = vscode.extensions.getExtension<ClineAPI>("buncover.buncover")
+		if (extension) {
+			const cline = extension.exports
+			cline.getWorkspaceSettings().then((workspaceSettings) => {
+				cline.setWorkspaceSettings({
+					...workspaceSettings,
+					filePath: absolutePath.toString().replaceAll("file://", ""),
+					uncoveredLines,
+				})
+			})
+		}
 
 		// Open the file and highlight uncovered lines
 		vscode.workspace.openTextDocument(absolutePath).then(
@@ -133,6 +158,7 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 		)
 	}
 }
+
 function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string) {
 	// Parse the line numbers (handling ranges like "16,18-20,22,24-25,27-33")
 	const lines = lineNumbers.split(",").flatMap((part) => {

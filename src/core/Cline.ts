@@ -50,7 +50,7 @@ import { addUserInstructions, SYSTEM_PROMPT } from "./prompts/system"
 import { truncateHalfConversation } from "./sliding-window"
 import { ClineProvider, GlobalFileNames } from "./webview/ClineProvider"
 import { showSystemNotification } from "../integrations/notifications"
-import { autoApproveCommands } from "../shared/OverrideSettings"
+import { autoApproveCommands, WorkspaceSettings } from "../shared/OverrideSettings"
 
 const cwd =
 	vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath).at(0) ?? path.join(os.homedir(), "Desktop") // may or may not exist but fs checking existence would immediately ask for permission which would be bad UX, need to come up with a better solution
@@ -68,6 +68,7 @@ export class Cline {
 	private browserSession: BrowserSession
 	private didEditFile: boolean = false
 	customInstructions?: string
+	workspaceSettings: WorkspaceSettings
 	autoApprovalSettings: AutoApprovalSettings
 	apiConversationHistory: Anthropic.MessageParam[] = []
 	clineMessages: ClineMessage[] = []
@@ -98,6 +99,7 @@ export class Cline {
 		provider: ClineProvider,
 		apiConfiguration: ApiConfiguration,
 		autoApprovalSettings: AutoApprovalSettings,
+		workspaceSettings: WorkspaceSettings,
 		customInstructions?: string,
 		task?: string,
 		images?: string[],
@@ -110,6 +112,7 @@ export class Cline {
 		this.browserSession = new BrowserSession(provider.context)
 		this.diffViewProvider = new DiffViewProvider(cwd)
 		this.customInstructions = customInstructions
+		this.workspaceSettings = workspaceSettings
 		this.autoApprovalSettings = autoApprovalSettings
 		if (historyItem) {
 			this.taskId = historyItem.id
