@@ -1,5 +1,25 @@
 # Change Log
 
+## [3.0.8]
+
+- Mitigate DeepSeek v3 diff edit errors by adding 'auto-formatting considerations' to system prompt, encouraging model to use updated file contents as reference point for SEARCH blocks
+
+## [3.0.7]
+
+- Revert to using batched file watcher to fix crash when many files would be created at once
+
+## [3.0.6]
+
+- Fix bug where some files would be missing in the `@` context mention menu
+- Add Bedrock support in additional regions
+- Diff edit improvements
+- Add OpenRouter's middle-out transform for models that don't use prompt caching (prevents context window limit errors, but cannot be applied to models like Claude since it would continuously break the cache)
+
+## [3.0.4]
+
+- Fix bug where gemini models would add code block artifacts to the end of text content
+- Fix context mention menu visual issues on light themes
+
 ## [3.0.2]
 
 - Adds block anchor matching for more reliable diff edits (if 3+ lines, first and last line are used as anchors to search for)

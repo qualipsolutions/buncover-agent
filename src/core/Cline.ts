@@ -938,6 +938,17 @@ export class Cline {
 						}
 					}
 				}
+
+				if (!block.partial) {
+					// Some models add code block artifacts (around the tool calls) which show up at the end of text content
+					// matches ``` with atleast one char after the last backtick, at the end of the string
+					const match = content?.trimEnd().match(/```[a-zA-Z0-9_-]+$/)
+					if (match) {
+						const matchLength = match[0].length
+						content = content.trimEnd().slice(0, -matchLength)
+					}
+				}
+
 				await this.say("text", content, undefined, block.partial)
 				break
 			}
@@ -1137,7 +1148,13 @@ export class Cline {
 								} catch (error) {
 									await this.say("diff_error", relPath)
 									pushToolResult(
-										formatResponse.toolError(`Error writing file: ${(error as Error)?.message}`),
+										formatResponse.toolError(
+											`${(error as Error)?.message}\n\n` +
+												`This is likely because the SEARCH block content doesn't match exactly with what's in the file.\n\n` +
+												`The file was reverted to its original state:\n\n` +
+												`<file_content path="${relPath.toPosix()}">\n${this.diffViewProvider.originalContent}\n</file_content>\n\n` +
+												`Try again with a more precise SEARCH block.\n(If you keep running into this error, you may use the write_to_file tool as a workaround.)`,
+										),
 									)
 									await this.diffViewProvider.revertChanges()
 									await this.diffViewProvider.reset()
