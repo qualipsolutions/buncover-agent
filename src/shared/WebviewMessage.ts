@@ -28,6 +28,7 @@ export interface WebviewMessage {
 		| "autoApprovalSettings"
 		| "workspaceSettings"
 		| "runTests"
+		| "generateTests"
 	text?: string
 	askResponse?: ClineAskResponse
 	apiConfiguration?: ApiConfiguration

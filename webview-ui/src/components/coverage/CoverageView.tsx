@@ -23,6 +23,14 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 		onDone()
 	}, [accessKey, projectId, onDone])
 
+	const handleGenerateTestCases = useCallback(() => {
+		if (!accessKey || !projectId) {
+			return
+		}
+		vscode.postMessage({ type: "generateTests" })
+		onDone()
+	}, [accessKey, projectId, onDone])
+
 	return (
 		<div
 			style={{
@@ -41,7 +49,7 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 					alignItems: "center",
 					padding: "10px 17px 10px 20px",
 				}}>
-				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>Coverage</h3>
+				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>Generate Coverage Report</h3>
 				<VSCodeButton onClick={onDone}>Done</VSCodeButton>
 			</div>
 
@@ -152,6 +160,69 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 						onClick={handleRunTests}>
 						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
 						Execute Tests
+					</VSCodeButton>
+				</div>
+
+				{/* Bottom padding */}
+				<div style={{ height: "20px" }} />
+
+				<div
+					style={{
+						marginBottom: "20px",
+						marginTop: "5px",
+					}}>
+					<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>Generate Test Cases</h3>
+				</div>
+
+				<div style={{ marginBottom: "10px" }}>
+					<VSCodeTextField
+						value={workspaceSettings?.filePath || ""}
+						disabled={true}
+						style={{ width: "100%" }}
+						placeholder="Current active file">
+						<span style={{ fontWeight: "500" }}>Current File</span>
+					</VSCodeTextField>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						The file that is currently open in the editor.
+					</p>
+				</div>
+
+				<div style={{ marginBottom: 5 }}>
+					<VSCodeTextArea
+						value={
+							(workspaceSettings?.uncoveredLines?.length ?? 0) > 0
+								? `${workspaceSettings?.uncoveredLines?.join(", ")}`
+								: "No uncovered lines found"
+						}
+						disabled={true}
+						style={{ width: "100%" }}
+						rows={4}
+						placeholder={'e.g. "Use file <path/to/file.js> as an example on how to mock the models"'}>
+						<span style={{ fontWeight: "500" }}>Uncovered Lines</span>
+					</VSCodeTextArea>
+					<p
+						style={{
+							fontSize: "12px",
+							marginTop: "5px",
+							color: "var(--vscode-descriptionForeground)",
+						}}>
+						The uncovered lines are the lines in the current file that are not covered by any tests.
+					</p>
+				</div>
+
+				<div style={{ marginTop: "30px", width: "100%" }}>
+					<VSCodeButton
+						disabled={!accessKey || !projectId || !workspaceSettings?.filePath}
+						appearance="secondary"
+						style={{ width: "100%" }}
+						onClick={handleGenerateTestCases}>
+						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
+						Generate Test Cases
 					</VSCodeButton>
 				</div>
 
