@@ -98,11 +98,6 @@
 				"command": "buncover.coverageButtonClicked",
 				"title": "Coverage",
 				"icon": "$(run-coverage)"
-			},
-			{
-				"command": "buncover.generateTests",
-				"title": "Generate test case for the current file",
-				"icon": "$(zap)"
 			}
 		],
 		"menus": {

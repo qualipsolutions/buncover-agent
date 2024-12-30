@@ -28,8 +28,7 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 			return
 		}
 		vscode.postMessage({ type: "generateTests" })
-		onDone()
-	}, [accessKey, projectId, onDone])
+	}, [accessKey, projectId])
 
 	return (
 		<div

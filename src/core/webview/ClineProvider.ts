@@ -23,7 +23,12 @@ import { openMention } from "../mentions"
 import { getNonce } from "./getNonce"
 import { getUri } from "./getUri"
 import { AutoApprovalSettings, DEFAULT_AUTO_APPROVAL_SETTINGS } from "../../shared/AutoApprovalSettings"
-import { bunCoverRunCommand, extensionName, WorkspaceSettings } from "../../shared/OverrideSettings"
+import {
+	bunCoverRunCommand,
+	extensionName,
+	generateTestsCommand,
+	WorkspaceSettings,
+} from "../../shared/OverrideSettings"
 import { showSystemNotification } from "../../integrations/notifications"
 
 /*
@@ -574,7 +579,58 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 						break
 					}
 					case "generateTests": {
-						await vscode.commands.executeCommand("buncover.generateTests")
+						const { apiConfiguration } = await this.getState()
+						const workspaceSettings =
+							await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
+
+						const accessKey = apiConfiguration.buncoverAccessKey
+						const projectId = workspaceSettings?.buncoverProjectId
+
+						if (!accessKey || !projectId) {
+							showSystemNotification({
+								subtitle: "BunCover credentials not found",
+								message: "Please set your BunCover credentials and project ID in the settings.",
+							})
+							break
+						}
+
+						const filePath = workspaceSettings?.filePath ?? ""
+
+						const isTestFile = filePath.includes(".test.")
+						if (isTestFile) {
+							vscode.window.showErrorMessage(
+								"This is a test file, please generate test code for domain code files",
+							)
+							return
+						}
+
+						const uncoveredLines =
+							workspaceSettings?.filePath === filePath ? (workspaceSettings?.uncoveredLines ?? []) : []
+
+						const message =
+							uncoveredLines.length > 0
+								? `Are you sure you want to generate test code for ${filePath} with uncovered lines ${uncoveredLines.join(", ")}?`
+								: `Are you sure you want to generate test code for ${filePath}?`
+
+						const answer = await vscode.window.showInformationMessage(message, "Yes", "No", "Cancel")
+
+						if (answer === "Yes") {
+							// Handle yes
+							const task = generateTestsCommand({
+								filePath,
+								accessKey,
+								projectId,
+								uncoveredLines,
+								testInstructions: workspaceSettings?.testInstructions ?? "",
+							})
+							await this.initClineWithTask(task)
+							await this.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
+						} else if (answer === "No") {
+							// Handle no
+						} else {
+							// Handle cancel
+						}
+
 						break
 					}
 					// Add more switch case statements here as more webview message commands

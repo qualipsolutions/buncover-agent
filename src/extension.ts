@@ -153,68 +153,6 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 	context.subscriptions.push(vscode.window.registerUriHandler({ handleUri }))
 
-	// Register the command that will be triggered by the button
-	let generateTests = vscode.commands.registerCommand("buncover.generateTests", async () => {
-		const editor = vscode.window.activeTextEditor
-		if (!editor) {
-			vscode.window.showErrorMessage("No file is currently open")
-			return
-		}
-
-		const filePath = editor.document.uri.fsPath
-		const { apiConfiguration } = await sidebarProvider.getState()
-		const accessKey = apiConfiguration?.buncoverAccessKey
-
-		const workspaceSettings =
-			await sidebarProvider.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")
-		const projectId = workspaceSettings?.buncoverProjectId
-
-		if (!accessKey || !projectId) {
-			vscode.window.showErrorMessage("BunCover credentials or project ID not found")
-			return
-		}
-
-		// make sure this is not a test file
-		const isTestFile = filePath.includes(".test.")
-		if (isTestFile) {
-			vscode.window.showErrorMessage("This is a test file, please generate test code for the domain code")
-			return
-		}
-
-		console.log("generateTests", {
-			filePath,
-			workspaceSettings,
-		})
-
-		const uncoveredLines = workspaceSettings?.filePath === filePath ? (workspaceSettings?.uncoveredLines ?? []) : []
-
-		const answer = await vscode.window.showInformationMessage(
-			`Are you sure you want to generate test code for ${filePath} with uncovered lines ${uncoveredLines.join(", ")}?`,
-			"Yes",
-			"No",
-			"Cancel",
-		)
-
-		if (answer === "Yes") {
-			// Handle yes
-			const task = generateTestsCommand({
-				filePath,
-				accessKey,
-				projectId,
-				uncoveredLines,
-				testInstructions: workspaceSettings?.testInstructions ?? "",
-			})
-			await sidebarProvider.initClineWithTask(task)
-			await sidebarProvider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
-		} else if (answer === "No") {
-			// Handle no
-		} else {
-			// Handle cancel
-		}
-	})
-
-	context.subscriptions.push(generateTests)
-
 	return createClineAPI(outputChannel, sidebarProvider)
 }
 
