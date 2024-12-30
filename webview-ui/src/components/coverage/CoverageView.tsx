@@ -212,7 +212,7 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 							marginTop: "5px",
 							color: "var(--vscode-descriptionForeground)",
 						}}>
-						The in the current file that are not covered by any tests.
+						The lines that are not covered by any tests.
 					</p>
 				</div>
 
@@ -222,7 +222,7 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 						appearance="secondary"
 						style={{ width: "100%" }}
 						onClick={handleGenerateTestCases}>
-						<span className="codicon codicon-run-coverage" style={{ marginRight: "6px" }}></span>
+						<span className="codicon codicon-zap" style={{ marginRight: "6px" }}></span>
 						Generate Test Cases
 					</VSCodeButton>
 				</div>

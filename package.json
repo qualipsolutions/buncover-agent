@@ -118,28 +118,18 @@
 					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "buncover.generateTests",
+					"command": "buncover.historyButtonClicked",
 					"group": "navigation@3",
 					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "buncover.mcpButtonClicked",
+					"command": "buncover.popoutButtonClicked",
 					"group": "navigation@4",
 					"when": "view == buncover.SidebarProvider"
 				},
 				{
-					"command": "buncover.historyButtonClicked",
-					"group": "navigation@5",
-					"when": "view == buncover.SidebarProvider"
-				},
-				{
-					"command": "buncover.popoutButtonClicked",
-					"group": "navigation@6",
-					"when": "view == buncover.SidebarProvider"
-				},
-				{
 					"command": "buncover.settingsButtonClicked",
-					"group": "navigation@7",
+					"group": "navigation@5",
 					"when": "view == buncover.SidebarProvider"
 				}
 			]
