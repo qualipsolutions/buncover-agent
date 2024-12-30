@@ -124,14 +124,16 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 			path.isAbsolute(fileLink.filePath) ? fileLink.filePath : path.join(workspaceRoot, fileLink.filePath),
 		)
 
-		// Parse uncovered lines
-		const uncoveredLines = fileLink.uncoveredLines.split(",").flatMap((part) => {
-			if (part.includes("-")) {
-				const [start, end] = part.split("-").map(Number)
-				return Array.from({ length: end - start + 1 }, (_, i) => start + i)
-			}
-			return [Number(part)]
-		})
+		// Parse uncovered lines only if they exist
+		const uncoveredLines = fileLink.uncoveredLines
+			? fileLink.uncoveredLines.split(",").flatMap((part) => {
+					if (part.includes("-")) {
+						const [start, end] = part.split("-").map(Number)
+						return Array.from({ length: end - start + 1 }, (_, i) => start + i)
+					}
+					return [Number(part)]
+				})
+			: []
 
 		// Get the ClineProvider instance and update workspace settings
 		const extension = vscode.extensions.getExtension<ClineAPI>("buncover.buncover")
@@ -146,7 +148,7 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 			})
 		}
 
-		// Open the file and highlight uncovered lines
+		// Open the file and highlight uncovered lines only if they exist
 		vscode.workspace.openTextDocument(absolutePath).then(
 			(doc) => {
 				vscode.window.showTextDocument(doc).then((editor) => {
