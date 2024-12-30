@@ -91,6 +91,22 @@ export class ClineProvider implements vscode.WebviewViewProvider {
 		ClineProvider.activeInstances.add(this)
 		this.workspaceTracker = new WorkspaceTracker(this)
 		this.mcpHub = new McpHub(this)
+
+		// Listen for active editor changes
+		vscode.window.onDidChangeActiveTextEditor(
+			async (editor) => {
+				if (editor) {
+					const workspaceSettings =
+						(await this.context.workspaceState.get<WorkspaceSettings>("workspaceSettings")) || {}
+					await this.updateWorkspaceSettings({
+						...workspaceSettings,
+						filePath: editor.document.uri.fsPath,
+					})
+				}
+			},
+			null,
+			this.disposables,
+		)
 	}
 
 	/*

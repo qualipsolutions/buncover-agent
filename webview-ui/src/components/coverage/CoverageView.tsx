@@ -175,13 +175,14 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 				</div>
 
 				<div style={{ marginBottom: "10px" }}>
-					<VSCodeTextField
+					<VSCodeTextArea
 						value={workspaceSettings?.filePath || ""}
 						disabled={true}
 						style={{ width: "100%" }}
+						rows={2}
 						placeholder="Current active file">
 						<span style={{ fontWeight: "500" }}>Current File</span>
-					</VSCodeTextField>
+					</VSCodeTextArea>
 					<p
 						style={{
 							fontSize: "12px",
@@ -211,7 +212,7 @@ const CoverageView = ({ onDone }: CoverageViewProps) => {
 							marginTop: "5px",
 							color: "var(--vscode-descriptionForeground)",
 						}}>
-						The uncovered lines are the lines in the current file that are not covered by any tests.
+						The in the current file that are not covered by any tests.
 					</p>
 				</div>
 
