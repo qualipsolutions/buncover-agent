@@ -164,7 +164,13 @@ export class BunCoverTerminalLinkProvider implements vscode.TerminalLinkProvider
 	}
 }
 
+let currentDecorationTypes: vscode.TextEditorDecorationType[] = []
+
 function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string) {
+	// Clear existing decorations
+	currentDecorationTypes.forEach((decorationType) => decorationType.dispose())
+	currentDecorationTypes = []
+
 	// Parse the line numbers (handling ranges like "16,18-20,22,24-25,27-33")
 	const lines = lineNumbers.split(",").flatMap((part) => {
 		if (part.includes("-")) {
@@ -183,6 +189,9 @@ function highlightUncoveredLines(editor: vscode.TextEditor, lineNumbers: string)
 		color: "inherit", // Ensures text color remains unchanged
 		fontWeight: "normal",
 	})
+
+	// Store the new decoration type
+	currentDecorationTypes.push(decorationType)
 
 	// Apply decorations
 	const decorationsArray = lines.map(
